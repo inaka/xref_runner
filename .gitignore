@@ -1,3 +1,4 @@
+.awconfig
 .eunit
 deps
 *.o
@@ -8,3 +9,8 @@ ebin
 rel/example_project
 .concrete/DEV_MODE
 .rebar
+log*/
+config/app.config
+.erlang.mk.packages.v2
+_rel/
+relx

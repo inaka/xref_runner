@@ -1,0 +1,16 @@
+{
+  application, gadget,
+  [
+   {description, "Xref Runner"},
+   {vsn, "0.0.1"},
+   {applications,
+    [ kernel
+    , stdlib
+    , erl_interface
+    , lager
+    ]},
+   {mod, {no_mod, []}},
+   {modules, []},
+   {registered, []}
+  ]
+}.
