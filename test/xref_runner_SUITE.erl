@@ -6,6 +6,8 @@
         , undefined_functions/1
         , locals_not_used/1
         , exports_not_used/1
+        , deprecated_function_calls/1
+        , deprecated_functions/1
         ]).
 
 -type config() :: [{atom(), term()}].
@@ -48,7 +50,7 @@ undefined_function_calls(_Config) ->
             } = W <- Warnings],
 
   ct:comment(
-    "It contains a warning for undefined_functionse:undefined_there()"),
+    "It contains a warning for undefined_functions:undefined_there()"),
   [W2] =
     [ W || #{ line      := 9 % Where the function is defined
             , source    := {undefined_function_calls, bad, 1}
@@ -148,3 +150,86 @@ exports_not_used(_Config) ->
   [] = Warnings -- [W1],
 
   {comment, ""}.
+
+-spec deprecated_function_calls(config()) -> {comment, string()}.
+deprecated_function_calls(_Config) ->
+  Path = filename:dirname(code:which(deprecated_function_calls)),
+  Config = #{ dirs => [Path]
+            , xref_defaults =>
+              [ {verbose, true}
+              , {warnings, true}
+              , {recurse, true}
+              ]
+            },
+  ct:comment("It runs"),
+  AllWarnings = xref_runner:check(deprecated_function_calls, Config),
+  Warnings =
+    [W || W = #{filename := F} <- AllWarnings
+        , filename:basename(F) == "deprecated_function_calls.erl"],
+
+  ct:pal("~p", [Warnings]),
+
+  ct:comment(
+    "It contains a warning for deprecated_function_calls:internal()"),
+  [W1] =
+    [ W || #{ line      := 10 % Where the function is defined
+            , source    := {deprecated_function_calls, bad, 1}
+            , target    := {deprecated_function_calls, internal, 0}
+            } = W <- Warnings],
+
+  ct:comment(
+    "It contains a warning for deprecated_functions:deprecated()"),
+  [W2] =
+    [ W || #{ line      := 7 % Where the function is defined
+            , source    := {deprecated_function_calls, bad, 0}
+            , target    := {deprecated_functions, deprecated, 0}
+            } = W <- Warnings],
+
+  ct:comment(
+    "It contains a warning for deprecated_functions:deprecated(_)"),
+  [W3] =
+    [ W || #{ line      := 10 % Where the function is defined
+            , source    := {deprecated_function_calls, bad, 1}
+            , target    := {deprecated_functions, deprecated, 1}
+            } = W <- Warnings],
+
+  ct:comment("It contains no other warnings"),
+  [] = Warnings -- [W1, W2, W3],
+
+  {comment, ""}.
+
+-spec deprecated_functions(config()) -> {comment, string()}.
+deprecated_functions(_Config) ->
+  Path = filename:dirname(code:which(deprecated_functions)),
+  Config = #{ dirs => [Path]
+            , xref_defaults =>
+              [ {verbose, true}
+              , {warnings, true}
+              , {recurse, true}
+              ]
+            },
+  ct:comment("It runs"),
+  AllWarnings = xref_runner:check(deprecated_functions, Config),
+  Warnings =
+    [W || W = #{filename := F} <- AllWarnings
+        , filename:basename(F) == "deprecated_functions.erl"],
+
+  ct:comment(
+    "It contains a warning for deprecated_functions:deprecated()"),
+  [W1] =
+    [ W || #{ line      := 8 % Where the function is defined
+            , source    := {deprecated_functions, deprecated, 0}
+            } = W <- Warnings],
+
+  ct:comment(
+    "It contains a warning for deprecated_functionse:deprecated_there()"),
+  [W2] =
+    [ W || #{ line      := 10 % Where the function is defined
+            , source    := {deprecated_functions, deprecated, 1}
+            } = W <- Warnings],
+
+  ct:comment("It contains no other warnings"),
+  [] = Warnings -- [W1, W2],
+
+  {comment, ""}.
+
