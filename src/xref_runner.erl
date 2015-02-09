@@ -19,10 +19,10 @@
                    , xref_defaults  => [xref_default()]
                    , dirs           => [file:name_all()]
                    }.
-
 -type warning() :: #{ filename      => file:name_all()
                     , line          => non_neg_integer()
-                    , message       => iodata()
+                    , source        => mfa()
+                    , target        => mfa()
                     }.
 
 -export_type([check/0, xref_default/0, config/0, warning/0]).
@@ -48,7 +48,7 @@ run(Check, Config) ->
 
     FilteredResults = filter_xref_results(Check, Results),
 
-    results_to_warnings(Check, FilteredResults)
+    [result_to_warning(Result) || Result <- FilteredResults]
   after
     stopped = xref:stop(Xref)
   end.
@@ -109,37 +109,20 @@ mfa(_M, MFA) -> MFA.
 parse_xref_result({_, MFAt}) -> MFAt;
 parse_xref_result(MFAt) -> MFAt.
 
-
-results_to_warnings(Check, Results) ->
-  [result_to_warning(Check, Result) || Result <- Results].
-
-result_to_warning(Check, {MFASource, MFATarget}) ->
+result_to_warning({MFASource, MFATarget}) ->
   {Filename, Line} = get_source(MFASource),
   #{ filename => Filename
    , line     => Line
-   , message  => warning_msg(Check, MFASource, MFATarget)
+   , source   => MFASource
+   , target   => MFATarget
    };
-result_to_warning(Check, MFA) ->
+result_to_warning(MFA) ->
   {Filename, Line} = get_source(MFA),
   #{ filename => Filename
    , line     => Line
-   , message  => warning_msg(Check, MFA)
+   , source   => MFA
+   , target   => MFA
    }.
-
-warning_msg(Check, {SM, SF, SA}, {TM, TF, TA}) ->
-  io_lib:format(
-    "~s:~s/~w calls ~s: ~s:~s/~w",
-    [SM, SF, SA, warning_msg(Check), TM, TF, TA]).
-
-warning_msg(Check, {M, F, A}) ->
-  io_lib:format("~s:~s/~w is ~s", [M, F, A, warning_msg(Check)]).
-
-warning_msg(undefined_function_calls) -> "an undefined function";
-warning_msg(undefined_functions) -> "an undefined function";
-warning_msg(locals_not_used) -> "an unused local function";
-warning_msg(exports_not_used) -> "an unused export";
-warning_msg(deprecated_function_calls) -> "a deprecated function";
-warning_msg(deprecated_functions) -> "a deprecated function".
 
 %%
 %% Given a MFA, find the file and LOC where it's defined. Note that
