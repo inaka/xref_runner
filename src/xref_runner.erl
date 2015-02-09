@@ -94,22 +94,23 @@ get_ignorelist(Mod, Check) ->
   IgnoreXref =
     [mfa(Mod, Value) || {ignore_xref, Values} <- Attributes, Value <- Values],
 
-  BehaviourCallbacks = get_behaviour_callbacks(Check, Attributes),
+  BehaviourCallbacks = get_behaviour_callbacks(Check, Mod, Attributes),
 
   %% And create a flat {M,F,A} list
   IgnoreXref ++ BehaviourCallbacks.
 
-get_behaviour_callbacks(exports_not_used, Attributes) ->
+get_behaviour_callbacks(exports_not_used, Mod, Attributes) ->
   Behaviours = [Value || {behaviour, Values} <- Attributes, Value <- Values],
-  [B:behaviour_info(callbacks) || B <- Behaviours];
-get_behaviour_callbacks(_Check, _Attributes) ->
+  [{Mod, {Mod, F, A}}
+   || B <- Behaviours, {F, A} <- B:behaviour_info(callbacks)];
+get_behaviour_callbacks(_Check, _Mod, _Attributes) ->
   [].
 
-mfa(M, {F, A}) -> {M, F, A};
-mfa(_M, MFA) -> MFA.
+mfa(M, {F, A}) -> {M, {M, F, A}};
+mfa(M, MFA) -> {M, MFA}.
 
-parse_xref_result({_, MFAt}) -> MFAt;
-parse_xref_result(MFAt) -> MFAt.
+parse_xref_result({{SM, _, _}, MFAt}) -> {SM, MFAt};
+parse_xref_result({TM, _, _} = MFAt) -> {TM, MFAt}.
 
 result_to_warning({MFASource, MFATarget}) ->
   {Filename, Line} = get_source(MFASource),
