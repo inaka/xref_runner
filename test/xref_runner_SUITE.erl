@@ -5,6 +5,7 @@
         , undefined_function_calls/1
         , undefined_functions/1
         , locals_not_used/1
+        , exports_not_used/1
         ]).
 
 -type config() :: [{atom(), term()}].
@@ -118,6 +119,29 @@ locals_not_used(_Config) ->
   [W1] =
     [ W || #{ line      := 9
             , source    := {locals_not_used, local_not, 1}
+            } = W <- Warnings],
+
+  ct:comment("It contains no other warnings"),
+  [] = Warnings -- [W1],
+
+  {comment, ""}.
+
+-spec exports_not_used(config()) -> {comment, string()}.
+exports_not_used(_Config) ->
+  Path = filename:dirname(code:which(exports_not_used)),
+  Config = #{ dirs => [Path] },
+
+  ct:comment("It runs"),
+  AllWarnings = xref_runner:check(exports_not_used, Config),
+  Warnings =
+    [W || W = #{filename := F} <- AllWarnings
+        , filename:basename(F) == "exports_not_used.erl"],
+
+  ct:comment(
+    "It contains a warning for exports_not_used:export_not()"),
+  [W1] =
+    [ W || #{ line      := 9
+            , source    := {exports_not_used, export_not, 1}
             } = W <- Warnings],
 
   ct:comment("It contains no other warnings"),

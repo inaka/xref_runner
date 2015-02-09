@@ -17,9 +17,12 @@ ERLC_OPTS += +warn_export_vars +warn_exported_vars +warn_missing_spec +warn_unty
 
 include erlang.mk
 
+# To avoid eunit autocompile
+TEST_ERLC_OPTS = +debug_info +warn_export_vars +warn_shadow_vars +warn_obsolete_guard
+TEST_ERLC_OPTS += +'{parse_transform, lager_transform}'
+
 # Commont Test Config
 
-TEST_ERLC_OPTS += +'{parse_transform, lager_transform}'
 CT_OPTS += -cover test/xref_runner.coverspec -vvv
 
 SHELL_OPTS= -name ${PROJECT}@`hostname` -s sync
