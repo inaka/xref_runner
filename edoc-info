@@ -1,0 +1,4 @@
+%% encoding: UTF-8
+{application,xref_runner}.
+{packages,[]}.
+{modules,[xref_runner]}.
