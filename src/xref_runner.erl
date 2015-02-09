@@ -1,10 +1,14 @@
 %% -------------------------------------------------------------------
+%% @doc XRef Runner.
 %% This module is basically copied from rebar's rebar_xref, which in turn
-%% borrows heavily from rebar's  http://github.com/etnt/eCheck project as
-%% written by Torbjorn Tornkvist <tobbe@kreditor.se>, Daniel Luna
-%% <daniel@lunas.se> and others.
+%% borrows heavily from http://github.com/etnt/echeckxref project as
+%% written by Torbjorn Tornkvist, Daniel Luna and others.
+%% @see http://github.com/etnt/echeckxref
+%% @end
 %% -------------------------------------------------------------------
 -module(xref_runner).
+-author('tobbe@kreditor.se').
+-author('daniel@lunas.se').
 -author('elbrujohalcon@inaka.net').
 
 -type check() :: undefined_function_calls
@@ -29,6 +33,7 @@
 -export_type([check/0, xref_default/0, config/0, warning/0]).
 -export([check/2]).
 
+%% @doc Runs a check on the dirs and with the options provided on Config.
 -spec check(check(), config()) -> [warning()].
 check(Check, Config) ->
   XrefDefaults = maps:get(xref_defaults, Config, []),
