@@ -64,7 +64,7 @@ code_path(Config) ->
 
 filter_xref_results(Check, Results) ->
   SourceModules =
-    lists:usort([source_module(Result) || Result <- Results]) -- [undefined],
+    lists:usort([source_module(Result) || Result <- Results]),
 
   Ignores =
     lists:flatmap(
@@ -74,8 +74,7 @@ filter_xref_results(Check, Results) ->
              not lists:member(parse_xref_result(Result), Ignores)].
 
 source_module({Mt,_Ft,_At}) -> Mt;
-source_module({{Ms,_Fs,_As},_Target}) -> Ms;
-source_module(_) -> undefined.
+source_module({{Ms,_Fs,_As},_Target}) -> Ms.
 
 %%
 %% Ignore behaviour functions, and explicitly marked functions
