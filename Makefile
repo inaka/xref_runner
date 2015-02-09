@@ -17,10 +17,15 @@ ERLC_OPTS += +warn_export_vars +warn_exported_vars +warn_missing_spec +warn_unty
 
 include erlang.mk
 
+# To avoid eunit autocompile
+TEST_ERLC_OPTS = +debug_info +warn_export_vars +warn_shadow_vars +warn_obsolete_guard
+TEST_ERLC_OPTS += +'{parse_transform, lager_transform}'
+
 # Commont Test Config
 
-TEST_ERLC_OPTS += +'{parse_transform, lager_transform}'
-CT_SUITES = xref_runner
-CT_OPTS = -cover test/xref_runner.coverspec
+CT_OPTS += -cover test/xref_runner.coverspec -vvv
 
 SHELL_OPTS= -name ${PROJECT}@`hostname` -s sync
+
+test-shell: build-ct-suites app
+	erl -pa ebin -pa deps/*/ebin -pa test -s sync -s lager
