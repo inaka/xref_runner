@@ -3,6 +3,16 @@
 # Xref Runner
 Erlang Xref Runner (inspired in rebar's rebar_xref)
 
+## Contact Us
+For **questions** or **general comments** regarding the use of this library,
+please use our public [hipchat room](https://www.hipchat.com/gpBpW3SsT).
+
+If you find any **bugs** or have a **problem** while using this library, please
+[open an issue](https://github.com/inaka/elvis/issues/new) in this repo
+(or a pull request :)).
+
+And you can check all of our open-source projects at [inaka.github.io](http://inaka.github.io).
+
 ## Why Xref Runner?
 So, Erlang/OTP comes with an excellent tool to check your code and detect bugs: [Xref](http://www.erlang.org/doc/apps/tools/xref_chapter.html).
 The problem lies in its not-extremely-simple interface. Using `xref` out of the box requires you to start a process, set up parameters, add directories, etc. before you can actually just run the checks you want to run.
