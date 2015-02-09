@@ -20,7 +20,9 @@ include erlang.mk
 # Commont Test Config
 
 TEST_ERLC_OPTS += +'{parse_transform, lager_transform}'
-CT_SUITES = xref_runner
-CT_OPTS = -cover test/xref_runner.coverspec
+CT_OPTS += -cover test/xref_runner.coverspec -vvv
 
 SHELL_OPTS= -name ${PROJECT}@`hostname` -s sync
+
+test-shell: build-ct-suites app
+	erl -pa ebin -pa deps/*/ebin -pa test -s sync -s lager

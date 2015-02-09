@@ -5,6 +5,7 @@
 %% <daniel@lunas.se> and others.
 %% -------------------------------------------------------------------
 -module(xref_runner).
+-author('elbrujohalcon@inaka.net').
 
 -type check() :: undefined_function_calls
                | undefined_functions
@@ -26,10 +27,10 @@
                     }.
 
 -export_type([check/0, xref_default/0, config/0, warning/0]).
--export([run/2]).
+-export([check/2]).
 
--spec run(check(), config()) -> [warning()].
-run(Check, Config) ->
+-spec check(check(), config()) -> [warning()].
+check(Check, Config) ->
   XrefDefaults = maps:get(xref_defaults, Config, []),
   Dirs = maps:get(dirs, Config, ["ebin"]),
 
@@ -57,8 +58,9 @@ run(Check, Config) ->
 %% Internal functions
 %% ===================================================================
 
-code_path(#{extra_paths := ExtraPaths}) ->
-  [P || P <- code:get_path() ++ ExtraPaths].
+code_path(Config) ->
+  ExtraPaths = maps:get(extra_paths, Config, []),
+  [P || P <- code:get_path() ++ ExtraPaths, filelib:is_dir(P)].
 
 filter_xref_results(Check, Results) ->
   SourceModules =
