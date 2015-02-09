@@ -123,7 +123,6 @@ result_to_warning(MFA) ->
   #{ filename => Filename
    , line     => Line
    , source   => MFA
-   , target   => MFA
    }.
 
 %%
