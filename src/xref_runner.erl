@@ -73,8 +73,8 @@ filter_xref_results(Check, Results) ->
   [Result || Result <- Results,
              not lists:member(parse_xref_result(Result), Ignores)].
 
-source_module({Mt,_Ft,_At}) -> Mt;
-source_module({{Ms,_Fs,_As},_Target}) -> Ms.
+source_module({Mt, _Ft, _At}) -> Mt;
+source_module({{Ms, _Fs, _As}, _Target}) -> Ms.
 
 %%
 %% Ignore behaviour functions, and explicitly marked functions
@@ -133,7 +133,7 @@ result_to_warning(MFA) ->
 get_source({M, F, A}) ->
   case code:get_object_code(M) of
     error -> {"", 0};
-    {M, Bin, _} -> find_function_source(M,F,A,Bin)
+    {M, Bin, _} -> find_function_source(M, F, A, Bin)
   end.
 
 find_function_source(M, F, A, Bin) ->
