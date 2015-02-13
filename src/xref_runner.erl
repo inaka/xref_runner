@@ -28,16 +28,41 @@
                     , line          => non_neg_integer()
                     , source        => mfa()
                     , target        => mfa()
+                    , check         => check()
                     }.
 
 -export_type([check/0, xref_default/0, config/0, warning/0]).
--export([check/2]).
+-export([check/0, check/2]).
+
+%% @doc Runs a list of checks.
+%%      To decide which checks to run and what options to use, it reads the
+%%      xref.config file in the current folder expecting it to be something
+%%      like a regular config file (i.e. [{app_name, [...]}].).
+%%      The runner will then read the configuration for the xref application.
+%%      It must contain two (optional) keys:
+%%      - checks: the list of checks to perform
+%%      - config: the configuration to use for all of them
+-spec check() -> [warning()].
+check() ->
+  {Checks, Config} =
+    case file:consult("xref.config") of
+      {ok, [FullConfig]} ->
+        case proplists:get_value(xref, FullConfig) of
+          undefined -> {all_checks(), #{}};
+          XrefConfig ->
+            { proplists:get_value(checks, XrefConfig, all_checks())
+            , proplists:get_value(config, XrefConfig, #{})
+            }
+        end;
+      {error, enoent} -> {all_checks(), #{}}
+    end,
+  lists:append([check(Check, Config) || Check <- Checks]).
 
 %% @doc Runs a check on the dirs and with the options provided on Config.
 -spec check(check(), config()) -> [warning()].
 check(Check, Config) ->
   XrefDefaults = maps:get(xref_defaults, Config, []),
-  Dirs = maps:get(dirs, Config, ["ebin"]),
+  Dirs = maps:get(dirs, Config, [ebin()]),
 
   {ok, Xref} = xref:start(?MODULE),
   try
@@ -54,7 +79,7 @@ check(Check, Config) ->
 
     FilteredResults = filter_xref_results(Check, Results),
 
-    [result_to_warning(Result) || Result <- FilteredResults]
+    [result_to_warning(Check, Result) || Result <- FilteredResults]
   after
     stopped = xref:stop(Xref)
   end.
@@ -62,6 +87,21 @@ check(Check, Config) ->
 %% ===================================================================
 %% Internal functions
 %% ===================================================================
+
+all_checks() ->
+  [ undefined_function_calls
+  , undefined_functions
+  , locals_not_used
+  , exports_not_used
+  , deprecated_function_calls
+  , deprecated_functions
+  ].
+
+ebin() ->
+  case filelib:is_dir("ebin") of
+    true -> filename:absname("ebin");
+    false -> filename:absname(".")
+  end.
 
 code_path(Config) ->
   ExtraPaths = maps:get(extra_paths, Config, []),
@@ -116,18 +156,20 @@ mfa(M, MFA) -> {M, MFA}.
 parse_xref_result({{SM, _, _}, MFAt}) -> {SM, MFAt};
 parse_xref_result({TM, _, _} = MFAt) -> {TM, MFAt}.
 
-result_to_warning({MFASource, MFATarget}) ->
+result_to_warning(Check, {MFASource, MFATarget}) ->
   {Filename, Line} = get_source(MFASource),
   #{ filename => Filename
    , line     => Line
    , source   => MFASource
    , target   => MFATarget
+   , check    => Check
    };
-result_to_warning(MFA) ->
+result_to_warning(Check, MFA) ->
   {Filename, Line} = get_source(MFA),
   #{ filename => Filename
    , line     => Line
    , source   => MFA
+   , check    => Check
    }.
 
 %%
