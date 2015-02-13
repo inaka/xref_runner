@@ -46,7 +46,7 @@
 check() ->
   {Checks, Config} =
     case file:consult("xref.config") of
-      {ok, FullConfig} ->
+      {ok, [FullConfig]} ->
         case proplists:get_value(xref, FullConfig) of
           undefined -> {all_checks(), #{}};
           XrefConfig ->
