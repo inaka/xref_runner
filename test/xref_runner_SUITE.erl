@@ -9,6 +9,8 @@
         , deprecated_function_calls/1
         , deprecated_functions/1
         , ignore_xref/1
+        , check_with_config_file/1
+        , check_with_no_config_file/1
         ]).
 
 -type config() :: [{atom(), term()}].
@@ -244,4 +246,50 @@ ignore_xref(_Config) ->
   ct:comment("It contains no other warnings"),
   [] = Warnings -- [W1, W2],
 
+  {comment, ""}.
+
+-spec check_with_no_config_file(config()) -> {comment, string()}.
+check_with_no_config_file(_Config) ->
+
+  ct:comment("Make sure there is no config"),
+  false = filelib:is_regular("xref.config"),
+
+  ct:comment("Run the checks in the wrong folder"),
+  [] = xref_runner:check(),
+
+  ct:comment("cd to the right folder"),
+  OldCwd = file:get_cwd(),
+  try
+    Path = filename:dirname(code:which(ignore_xref)),
+    file:set_cwd(Path),
+    ct:pal("~p", [Path]),
+
+    ct:comment("Run the checks with an empty ebin folder"),
+    case filelib:is_dir("ebin") of
+      true -> file:del_dir("ebin");
+      false -> ok
+    end,
+    file:make_dir("ebin"),
+    [] = xref_runner:check(),
+
+    ct:comment("Run the checks in the right folder, without ebin"),
+    ok = file:del_dir("ebin"),
+    Results = xref_runner:check(), %% All the warnings from the other tests
+    [_|_] = [1 || #{check := undefined_function_calls} <- Results],
+    [_|_] = [1 || #{check := undefined_functions} <- Results],
+    [_|_] = [1 || #{check := locals_not_used} <- Results],
+    [_|_] = [1 || #{check := exports_not_used} <- Results],
+    [_|_] = [1 || #{check := deprecated_function_calls} <- Results],
+    [_|_] = [1 || #{check := deprecated_functions} <- Results],
+
+    {comment, ""}
+  after
+    file:set_cwd(OldCwd)
+  end.
+
+
+-spec check_with_config_file(config()) -> {comment, string()}.
+check_with_config_file(_Config) ->
+  Config =
+    [{xref, [{config, #{}}]}],
   {comment, ""}.
