@@ -64,6 +64,8 @@ check(Check, Config) ->
   XrefDefaults = maps:get(xref_defaults, Config, []),
   Dirs = maps:get(dirs, Config, [ebin()]),
 
+  lists:foreach(fun code:add_path/1, Dirs),
+
   {ok, Xref} = xref:start(?MODULE),
   try
     ok = xref:set_library_path(Xref, code_path(Config)),
