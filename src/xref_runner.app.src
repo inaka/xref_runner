@@ -1,8 +1,8 @@
 {
-  application, gadget,
+  application, xref_runner,
   [
    {description, "Xref Runner"},
-   {vsn, "0.0.2"},
+   {vsn, "0.1.0"},
    {applications,
     [ kernel
     , stdlib
