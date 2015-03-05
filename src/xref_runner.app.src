@@ -9,7 +9,6 @@
     , erl_interface
     , lager
     ]},
-   {mod, {no_mod, []}},
    {modules, []},
    {registered, []}
   ]
