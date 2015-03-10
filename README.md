@@ -39,6 +39,23 @@ The second paramter is a configuration map. All of its fields are optional. The 
 * **xref_defaults**: Default values to configure xref (check `xref:set_default`). _default value:_ `[]`
 * **dirs**: Directories to be scanned with `xref`. _default value:_ `["ebin"]`
 
+Also you can use `xref_runner:check/0` without parameters to run the whole check list. In this case, the configuration will be taken from `xref.config` from the root dir, that should look like this:
+```erlang
+[
+   {xref, [
+            {config, #{dirs => ["test"]}},
+            {checks, [ undefined_function_calls
+                     , undefined_functions
+                     , locals_not_used
+                     , exports_not_used
+                     , deprecated_function_calls
+                     , deprecated_functions
+                     ]}
+          ]
+   }
+].
+```
+
 Using that function will give you a list of _warnings_ as its result. Warnings are also maps with the following fields:
 
 * **filename**: The name of the file for which the warning is reported
@@ -51,15 +68,18 @@ Using the modules in the [examples](test/examples) folder, these are some of the
 
 ```erlang
 > xref_runner:check(undefined_function_calls, #{dirs => ["test"]}).
-[#{filename => "test/examples/undefined_function_calls.erl",
+[#{check => undefined_function_calls,
+   filename => "test/examples/undefined_function_calls.erl",
    line => 5,
    source => {undefined_function_calls,bad,0},
    target => {undefined_function_calls,undefined_here,0}},
- #{filename => "test/examples/undefined_function_calls.erl",
+ #{check => undefined_function_calls,
+   filename => "test/examples/undefined_function_calls.erl",
    line => 9,
    source => {undefined_function_calls,bad,1},
    target => {other_module,undefined_somewhere_else,1}},
- #{filename => "test/examples/undefined_function_calls.erl",
+ #{check => undefined_function_calls,
+   filename => "test/examples/undefined_function_calls.erl",
    line => 9,
    source => {undefined_function_calls,bad,1},
    target => {undefined_functions,undefined_there,0}},
@@ -70,9 +90,16 @@ Using the modules in the [examples](test/examples) folder, these are some of the
 ```erlang
 > xref_runner:check(undefined_functions, #{dirs => ["test"],
                                            xref_defaults => []}).
-[#{filename => [],line => 0,source => {other_module,undefined_somewhere_else,0}},
- #{filename => [],line => 0,source => {other_module,undefined_somewhere_else,1}},
- #{filename => "test/examples/undefined_function_calls.erl",
+[#{check => undefined_functions,
+   filename => [],
+   line => 0,
+   source => {other_module,undefined_somewhere_else,0}},
+ #{check => undefined_functions,
+   filename => [],
+   line => 0,
+   source => {other_module,undefined_somewhere_else,1}},
+ #{check => undefined_functions,
+   filename => "test/examples/undefined_function_calls.erl",
    line => 0,
    source => {undefined_function_calls,undefined_here,0}},
  …
@@ -81,20 +108,24 @@ Using the modules in the [examples](test/examples) folder, these are some of the
 
 ```erlang
 > xref_runner:check(locals_not_used, #{dirs => ["test"]}).
-[#{filename => "test/examples/locals_not_used.erl",
+[#{check => locals_not_used,
+   filename => "test/examples/locals_not_used.erl",
    line => 9,
    source => {locals_not_used,local_not,1}}]
 ```
 
 ```erlang
 > xref_runner:check(exports_not_used, #{dirs => ["test"]}).
-[#{filename => "test/examples/deprecated_function_calls.erl",
+[#{check => exports_not_used,
+   filename => "test/examples/deprecated_function_calls.erl",
    line => 7,
    source => {deprecated_function_calls,bad,0}},
- #{filename => "test/examples/deprecated_function_calls.erl",
+ #{check => exports_not_used,
+   filename => "test/examples/deprecated_function_calls.erl",
    line => 10,
    source => {deprecated_function_calls,bad,1}},
- #{filename => "test/examples/deprecated_function_calls.erl",
+ #{check => exports_not_used,
+   filename => "test/examples/deprecated_function_calls.erl",
    line => 14,
    source => {deprecated_function_calls,good,0}},
 …
@@ -103,15 +134,18 @@ Using the modules in the [examples](test/examples) folder, these are some of the
 
 ```erlang
 > xref_runner:check(deprecated_function_calls, #{dirs => ["test"]}).
-[#{filename => "test/examples/deprecated_function_calls.erl",
+[#{check => deprecated_function_calls,
+   filename => "test/examples/deprecated_function_calls.erl",
    line => 7,
    source => {deprecated_function_calls,bad,0},
    target => {deprecated_functions,deprecated,0}},
- #{filename => "test/examples/deprecated_function_calls.erl",
+ #{check => deprecated_function_calls,
+   filename => "test/examples/deprecated_function_calls.erl",
    line => 10,
    source => {deprecated_function_calls,bad,1},
    target => {deprecated_function_calls,internal,0}},
- #{filename => "test/examples/deprecated_function_calls.erl",
+ #{check => deprecated_function_calls,
+   filename => "test/examples/deprecated_function_calls.erl",
    line => 10,
    source => {deprecated_function_calls,bad,1},
    target => {deprecated_functions,deprecated,1}},
@@ -121,35 +155,61 @@ Using the modules in the [examples](test/examples) folder, these are some of the
 
 ```erlang
 > xref_runner:check(deprecated_functions, #{dirs => ["test"]}).
-[#{filename => "test/examples/deprecated_function_calls.erl",
+[#{check => deprecated_functions,
+   filename => "test/examples/deprecated_function_calls.erl",
    line => 17,
    source => {deprecated_function_calls,internal,0}},
- #{filename => "test/examples/deprecated_functions.erl",
+ #{check => deprecated_functions,
+   filename => "test/examples/deprecated_functions.erl",
    line => 8,
    source => {deprecated_functions,deprecated,0}},
- #{filename => "test/examples/deprecated_functions.erl",
+ #{check => deprecated_functions,
+   filename => "test/examples/deprecated_functions.erl",
    line => 10,
    source => {deprecated_functions,deprecated,1}},
- #{filename => "test/examples/ignore_xref.erl",
+ #{check => deprecated_functions,
+   filename => "test/examples/ignore_xref.erl",
    line => 19,
    source => {ignore_xref,internal,0}}]
 ```
 
 ```erlang
-2015-02-09 15:57:42.499
 > xref_runner:check(deprecated_function_calls, #{dirs => ["test"]}).
-[#{filename => "test/examples/deprecated_function_calls.erl",
+[#{check => deprecated_function_calls,
+   filename => "test/examples/deprecated_function_calls.erl",
    line => 7,
    source => {deprecated_function_calls,bad,0},
    target => {deprecated_functions,deprecated,0}},
- #{filename => "test/examples/deprecated_function_calls.erl",
+ #{check => deprecated_function_calls,
+   filename => "test/examples/deprecated_function_calls.erl",
    line => 10,
    source => {deprecated_function_calls,bad,1},
    target => {deprecated_function_calls,internal,0}},
- #{filename => "test/examples/deprecated_function_calls.erl",
+ #{check => deprecated_function_calls,
+   filename => "test/examples/deprecated_function_calls.erl",
    line => 10,
    source => {deprecated_function_calls,bad,1},
    target => {deprecated_functions,deprecated,1}},
  …
+]
+```
+```erlang
+> xref_runner:check().
+[#{check => undefined_function_calls,
+   filename => "test/examples/undefined_function_calls.erl",
+   line => 5,
+   source => {undefined_function_calls,bad,0},
+   target => {undefined_function_calls,undefined_here,0}},
+ #{check => undefined_function_calls,
+   filename => "test/examples/undefined_function_calls.erl",
+   line => 9,
+   source => {undefined_function_calls,bad,1},
+   target => {other_module,undefined_somewhere_else,1}},
+ #{check => undefined_function_calls,
+   filename => "test/examples/undefined_function_calls.erl",
+   line => 9,
+   source => {undefined_function_calls,bad,1},
+   target => {undefined_functions,undefined_there,0}},
+…
 ]
 ```
