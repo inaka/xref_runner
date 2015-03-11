@@ -32,7 +32,22 @@
                     }.
 
 -export_type([check/0, xref_default/0, config/0, warning/0]).
--export([check/0, check/1, check/2]).
+-export([main/1, check/0, check/1, check/2]).
+
+%% @doc Allows us to runs xref_runner as script.
+%%      This can be generated executing make escript
+-spec main([string()]) -> ok.
+main(Args) ->
+    OptSpecList = option_spec_list(),
+    case getopt:parse(OptSpecList, Args) of
+        {ok, {[], []}} ->
+            check();
+        {ok, {Options, Commands}} ->
+            process_options(Options, Commands);
+        {error, {Reason, Data}} ->
+            xref_runner_utils:error_prn("~s ~p~n", [Reason, Data]),
+            help()
+    end.
 
 %% @doc Runs a list of checks.
 %%      To decide which checks to run and what options to use, it reads the
@@ -85,7 +100,9 @@ check(Check, Config) ->
 
     FilteredResults = filter_xref_results(Check, Results),
 
-    [result_to_warning(Check, Result) || Result <- FilteredResults]
+    ResultToPrint = [result_to_warning(Check, Result) || Result <- FilteredResults],
+    io:format("~p", [ResultToPrint]),
+    ResultToPrint
   after
     stopped = xref:stop(Xref)
   end.
@@ -93,6 +110,46 @@ check(Check, Config) ->
 %% ===================================================================
 %% Internal functions
 %% ===================================================================
+
+-spec option_spec_list() -> [getopt:option_spec()].
+option_spec_list() ->
+    Config = "Provide the path to the configuration file. "
+               ++ "When none is provided xref_runner checks if there's "
+               ++ "an ./xref.config file.",
+    [
+     {help, $h, "help", undefined, "Show this help information."},
+     {config, $c, "config", string, Config}
+    ].
+
+-spec help() -> ok.
+help() ->
+    OptSpecList = option_spec_list(),
+    getopt:usage(OptSpecList, "xref_runner", standard_io).
+
+-spec process_options([atom()], [string()]) -> ok.
+process_options(Options, Commands) ->
+    try
+        Config = xref_runner_config:default(),
+        AtomCommands = lists:map(fun list_to_atom/1, Commands),
+        process_options(Options, AtomCommands, Config)
+    catch
+        throw:Exception -> {error, Exception}
+    end.
+
+-spec process_options([atom()], [string()], xref_runner_config:config()) -> ok.
+process_options([help | Opts], Cmds, Config) ->
+    help(),
+    process_options(Opts, Cmds, Config);
+process_options([{config, Path} | Opts], Cmds, Config) ->
+    case file:consult(Path) of
+      {ok, _} ->
+          check(Path),
+          process_options(Opts, Cmds, Config);
+      {error, Reason} ->
+          xref_runner_utils:error_prn("~p.", [Reason])
+    end;
+process_options([], _Cmds, _Config) ->
+  ok.
 
 all_checks() ->
   [ undefined_function_calls
