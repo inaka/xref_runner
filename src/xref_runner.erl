@@ -32,7 +32,15 @@
                     }.
 
 -export_type([check/0, xref_default/0, config/0, warning/0]).
--export([check/0, check/1, check/2]).
+-export([main/1, check/0, check/1, check/2]).
+
+-spec main(list()) -> ok.
+main(Args) ->
+    case Args of
+        [] -> check();
+        [Path] -> check(Path);
+        [Check, Conf] -> check(Check, Conf)
+    end.
 
 %% @doc Runs a list of checks.
 %%      To decide which checks to run and what options to use, it reads the
