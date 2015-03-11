@@ -32,7 +32,7 @@
                     }.
 
 -export_type([check/0, xref_default/0, config/0, warning/0]).
--export([check/0, check/2]).
+-export([check/0, check/1, check/2]).
 
 %% @doc Runs a list of checks.
 %%      To decide which checks to run and what options to use, it reads the
@@ -44,8 +44,12 @@
 %%      - config: the configuration to use for all of them
 -spec check() -> [warning()].
 check() ->
+  check("xref.config").
+
+-spec check(file:name_all()) -> [warning()].
+check(Path) ->
   {Checks, Config} =
-    case file:consult("xref.config") of
+    case file:consult(Path) of
       {ok, [FullConfig]} ->
         case proplists:get_value(xref, FullConfig) of
           undefined -> {all_checks(), #{}};
