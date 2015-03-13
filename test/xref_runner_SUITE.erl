@@ -11,6 +11,7 @@
         , ignore_xref/1
         , check_with_config_file/1
         , check_with_no_config_file/1
+        , check_as_script/1
         ]).
 
 -type config() :: [{atom(), term()}].
@@ -367,6 +368,100 @@ check_with_config_file(_Config) ->
           }
         ] ),
     SomeResults1 = xref_runner:check("test-xref.config"),
+    [] = [1 || #{check := undefined_function_calls} <- SomeResults],
+    [] = [1 || #{check := undefined_functions} <- SomeResults],
+    [_|_] = [1 || #{check := locals_not_used} <- SomeResults],
+    [_|_] = [1 || #{check := exports_not_used} <- SomeResults],
+    [] = [1 || #{check := deprecated_function_calls} <- SomeResults],
+    [] = [1 || #{check := deprecated_functions} <- SomeResults],
+
+    {comment, ""}
+  after
+    file:delete("xref.config"),
+    file:delete("test-xref.config"),
+    file:set_cwd(OldCwd)
+  end.
+
+-spec check_as_script(config()) -> {comment, string()}.
+check_as_script(_Config) ->
+
+ct:comment("Make sure there is no config"),
+  false = filelib:is_regular("xref.config"),
+  false = filelib:is_regular("test-xref.config"),
+
+  WriteConfig =
+    fun(Config) ->
+      file:write_file("xref.config", io_lib:format("~p.", [Config]))
+    end,
+
+  WriteTestConfig =
+    fun(Config) ->
+      file:write_file("test-xref.config", io_lib:format("~p.", [Config]))
+    end,
+
+  OldCwd = file:get_cwd(),
+
+  try
+    ct:comment("Empty config works as if there is no config"),
+    ok = WriteConfig([]),
+    [] = xref_runner:main([]),
+
+    ct:comment("Empty list of options works as if there is no config"),
+    ok = WriteConfig([{xref, []}]),
+    [] = xref_runner:main([]),
+
+    ct:comment("With the proper dir, but no checks, runs all checks"),
+    Path = filename:dirname(code:which(ignore_xref)),
+    ok = WriteConfig([{xref, [{config, #{dirs => [Path]}}]}]),
+    AllResults = xref_runner:main([]),
+    [_|_] = [1 || #{check := undefined_function_calls} <- AllResults],
+    [_|_] = [1 || #{check := undefined_functions} <- AllResults],
+    [_|_] = [1 || #{check := locals_not_used} <- AllResults],
+    [_|_] = [1 || #{check := exports_not_used} <- AllResults],
+    [_|_] = [1 || #{check := deprecated_function_calls} <- AllResults],
+    [_|_] = [1 || #{check := deprecated_functions} <- AllResults],
+
+    ct:comment("With the proper dir, with checks, runs only those checks"),
+    Path = filename:dirname(code:which(ignore_xref)),
+    ok =
+      WriteConfig(
+        [ { xref
+          , [ {config, #{dirs => [Path]}}
+            , {checks, [locals_not_used, exports_not_used]}
+            ]
+          }
+        ] ),
+    SomeResults = xref_runner:main([]),
+    [] = [1 || #{check := undefined_function_calls} <- SomeResults],
+    [] = [1 || #{check := undefined_functions} <- SomeResults],
+    [_|_] = [1 || #{check := locals_not_used} <- SomeResults],
+    [_|_] = [1 || #{check := exports_not_used} <- SomeResults],
+    [] = [1 || #{check := deprecated_function_calls} <- SomeResults],
+    [] = [1 || #{check := deprecated_functions} <- SomeResults],
+
+    ct:comment("With the proper dir, with checks == [], runs no check"),
+    Path = filename:dirname(code:which(ignore_xref)),
+    ok =
+      WriteConfig(
+        [ { xref
+          , [ {config, #{dirs => [Path]}}
+            , {checks, []}
+            ]
+          }
+        ] ),
+    [] = xref_runner:main([]),
+
+    ct:comment("With the proper dir, with checks, specifying xref.config path"),
+    Path = filename:dirname(code:which(ignore_xref)),
+    ok =
+      WriteTestConfig(
+        [ { xref
+          , [ {config, #{dirs => [Path]}}
+            , {checks, [locals_not_used, exports_not_used]}
+            ]
+          }
+        ] ),
+    SomeResults1 = xref_runner:main("-c test-xref.config"),
     [] = [1 || #{check := undefined_function_calls} <- SomeResults],
     [] = [1 || #{check := undefined_functions} <- SomeResults],
     [_|_] = [1 || #{check := locals_not_used} <- SomeResults],
