@@ -20,6 +20,22 @@ To mitigate that, [rebar](http://github.com/rebar/rebar) comes with a handy comm
 But, sometimes, you don't want to use rebar or you want to get the warnings as erlang terms and not just printed out in the console.
 That's when xref_runner comes along.
 
+### Script
+
+`xref_runner` can be turned into a script by executing `make escript`. This will
+generate an `xref_runner` self-contained executable script, from which you can get
+help by typing `xref_runner -h`.
+
+Use `xref_runner` command to run from the terminal (i.e. `xref_runner`).
+There's no need to specify a configuration file path if you have an
+`xref.config` file in the same location where you are executing the script,
+otherwise a configuration file can be specified through the use of the
+`--config` (or just `-c`) option.
+
+```bash
+xref_runner --config ./xref.config
+```
+
 ## How to Use it?
 Just make sure it's in your code path and call `xref_runner:check/2` with the proper parameters.
 

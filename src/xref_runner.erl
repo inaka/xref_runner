@@ -100,7 +100,8 @@ check(Check, Config) ->
 
     FilteredResults = filter_xref_results(Check, Results),
 
-    ResultToPrint = [result_to_warning(Check, Result) || Result <- FilteredResults],
+    ResultToPrint =
+      [result_to_warning(Check, Result) || Result <- FilteredResults],
     io:format("~p", [ResultToPrint]),
     ResultToPrint
   after
