@@ -1,5 +1,7 @@
 PROJECT = xref_runner
 
+REBAR?=rebar
+
 DEPS = lager sync eper getopt
 
 dep_eper = git git://github.com/massemanet/eper.git 0.90.0
@@ -34,7 +36,7 @@ test-shell: build-ct-suites app
 # Builds the xref_runner escript.
 
 escript: all
-	rebar escriptize
+	${REBAR} escriptize
 
 install: escript
-	cp xref_runner /usr/local/bin
+	cp xrefr /usr/local/bin

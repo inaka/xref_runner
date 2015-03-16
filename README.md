@@ -23,17 +23,17 @@ That's when xref_runner comes along.
 ### Script
 
 `xref_runner` can be turned into a script by executing `make escript`. This will
-generate an `xref_runner` self-contained executable script, from which you can get
-help by typing `xref_runner -h`.
+generate an `xrefr` self-contained executable script, from which you can get
+help by typing `xrefr -h`.
 
-Use `xref_runner` command to run from the terminal (i.e. `xref_runner`).
+Use `xrefr` command to run from the terminal (i.e. `xrefr`).
 There's no need to specify a configuration file path if you have an
 `xref.config` file in the same location where you are executing the script,
 otherwise a configuration file can be specified through the use of the
 `--config` (or just `-c`) option.
 
 ```bash
-xref_runner --config ./xref.config
+xrefr --config xref.config
 ```
 
 ## How to Use it?
