@@ -49,19 +49,21 @@ process_options([help | _Opts]) ->
   help();
 process_options([{config, Path} | _Opts]) ->
   XrefWarnings = xref_runner:check(Path),
-  warnings_prn(Path, XrefWarnings),
+  warnings_prn(XrefWarnings),
   XrefWarnings;
 process_options([]) ->
-  xref_runner:check().
+  XrefWarnings = xref_runner:check(),
+  warnings_prn(XrefWarnings),
+  XrefWarnings.
 
-generate_comment(RepoDir, XrefWarning) ->
+generate_comment(XrefWarning) ->
   #{ filename := Filename
    , line     := Line
    , source   := Source
    , check    := Check
    } = XrefWarning,
   Target = maps:get(target, XrefWarning, undefined),
-  [ re:replace(Filename, [$^ | RepoDir], "", [{return, binary}])
+  [ Filename
   , ":", integer_to_list(Line)
   , " ", generate_comment_text(Check, Source, Target)
   ].
@@ -85,8 +87,8 @@ generate_comment_text(deprecated_function_calls, SMFA, TMFA) ->
 generate_comment_text(deprecated_functions, SMFA, _TMFA) ->
   io_lib:format("~s is deprecated", [SMFA]).
 
-warnings_prn(Path, Comments) ->
-  Messages = [generate_comment(Path, Comment) || Comment <- Comments],
+warnings_prn(Comments) ->
+  Messages = lists:map(fun generate_comment/1, Comments),
   lists:foreach(fun warning_prn/1, Messages).
 
 -spec warning_prn(string()) -> ok.
