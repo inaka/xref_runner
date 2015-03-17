@@ -1,6 +1,6 @@
 # Change Log
 
-## [0.2.0](https://github.com/inaka/xref_runner/tree/0.2.0) (2015-03-17)
+## [0.1.2](https://github.com/inaka/xref_runner/tree/0.1.2) (2015-03-17)
 
 [Full Changelog](https://github.com/inaka/xref_runner/compare/0.1.1...HEAD)
 
@@ -13,6 +13,8 @@
 - escriptize [\#2](https://github.com/inaka/xref_runner/issues/2)
 
 **Merged pull requests:**
+
+- remove useless deps [\#20](https://github.com/inaka/xref_runner/pull/20) ([elbrujohalcon](https://github.com/elbrujohalcon))
 
 - \[Fix \#2\] Euen.2.escriptize [\#19](https://github.com/inaka/xref_runner/pull/19) ([Euen](https://github.com/Euen))
 
