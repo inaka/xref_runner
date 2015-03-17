@@ -3,9 +3,9 @@ PROJECT = xref_runner
 REBAR?=rebar
 
 DEPS = getopt
-
 dep_getopt = git https://github.com/jcomellas/getopt v0.8.2
 
+PLT_APPS := tools
 DIALYZER_DIRS := ebin/
 DIALYZER_OPTS := --verbose --statistics -Werror_handling \
                  -Wrace_conditions #-Wunmatched_returns
