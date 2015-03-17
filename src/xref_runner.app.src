@@ -7,7 +7,6 @@
     [ kernel
     , stdlib
     , erl_interface
-    , lager
     ]},
    {modules, []},
    {registered, []}
