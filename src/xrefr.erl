@@ -63,10 +63,13 @@ generate_comment(XrefWarning) ->
    , check    := Check
    } = XrefWarning,
   Target = maps:get(target, XrefWarning, undefined),
-  [ Filename
-  , ":", integer_to_list(Line)
-  , " ", generate_comment_text(Check, Source, Target)
-  ].
+  Position =
+    case {Filename, Line} of
+      {"", _} -> "";
+      {Filename, 0} -> [Filename, " "];
+      {Filename, Line} -> [Filename, ":", integer_to_list(Line), " "]
+    end,
+  [Position, generate_comment_text(Check, Source, Target)].
 
 generate_comment_text(Check, {SM, SF, SA}, TMFA) ->
   SMFA = io_lib:format("`~p:~p/~p`", [SM, SF, SA]),
