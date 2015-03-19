@@ -52,13 +52,13 @@ check(Path) ->
     case file:consult(Path) of
       {ok, [FullConfig]} ->
         case proplists:get_value(xref, FullConfig) of
-          undefined -> {all_checks(), #{}};
+          undefined -> {default_checks(), #{}};
           XrefConfig ->
-            { proplists:get_value(checks, XrefConfig, all_checks())
+            { proplists:get_value(checks, XrefConfig, default_checks())
             , proplists:get_value(config, XrefConfig, #{})
             }
         end;
-      {error, enoent} -> {all_checks(), #{}}
+      {error, enoent} -> {default_checks(), #{}}
     end,
   lists:append([check(Check, Config) || Check <- Checks]).
 
@@ -94,13 +94,10 @@ check(Check, Config) ->
 %% Internal functions
 %% ===================================================================
 
-all_checks() ->
+default_checks() ->
   [ undefined_function_calls
-  , undefined_functions
   , locals_not_used
-  , exports_not_used
   , deprecated_function_calls
-  , deprecated_functions
   ].
 
 ebin() ->
