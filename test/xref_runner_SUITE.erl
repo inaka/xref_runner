@@ -285,13 +285,13 @@ check_with_no_config_file(_Config) ->
 
     ct:comment("Run the checks in the right folder, without ebin"),
     ok = file:del_dir("ebin"),
-    Results = xref_runner:check(), %% All the warnings from the other tests
+    Results = xref_runner:check(), %% All the warnings from the default tests
     [_|_] = [1 || #{check := undefined_function_calls} <- Results],
-    [_|_] = [1 || #{check := undefined_functions} <- Results],
+    [] = [1 || #{check := undefined_functions} <- Results],
     [_|_] = [1 || #{check := locals_not_used} <- Results],
-    [_|_] = [1 || #{check := exports_not_used} <- Results],
+    [] = [1 || #{check := exports_not_used} <- Results],
     [_|_] = [1 || #{check := deprecated_function_calls} <- Results],
-    [_|_] = [1 || #{check := deprecated_functions} <- Results],
+    [] = [1 || #{check := deprecated_functions} <- Results],
 
     {comment, ""}
   after
@@ -327,16 +327,16 @@ check_with_config_file(_Config) ->
     ok = WriteConfig([{xref, []}]),
     [] = xref_runner:check(),
 
-    ct:comment("With the proper dir, but no checks, runs all checks"),
+    ct:comment("With the proper dir, but no checks, runs default checks"),
     Path = filename:dirname(code:which(ignore_xref)),
     ok = WriteConfig([{xref, [{config, #{dirs => [Path]}}]}]),
     AllResults = xref_runner:check(),
     [_|_] = [1 || #{check := undefined_function_calls} <- AllResults],
-    [_|_] = [1 || #{check := undefined_functions} <- AllResults],
+    [] = [1 || #{check := undefined_functions} <- AllResults],
     [_|_] = [1 || #{check := locals_not_used} <- AllResults],
-    [_|_] = [1 || #{check := exports_not_used} <- AllResults],
+    [] = [1 || #{check := exports_not_used} <- AllResults],
     [_|_] = [1 || #{check := deprecated_function_calls} <- AllResults],
-    [_|_] = [1 || #{check := deprecated_functions} <- AllResults],
+    [] = [1 || #{check := deprecated_functions} <- AllResults],
 
     ct:comment("With the proper dir, with checks, runs only those checks"),
     Path = filename:dirname(code:which(ignore_xref)),
@@ -437,16 +437,16 @@ check_as_script(_Config) ->
     ok = WriteConfig([{xref, []}]),
     [] = xrefr:main([]),
 
-    ct:comment("With the proper dir, but no checks, runs all checks"),
+    ct:comment("With the proper dir, but no checks, runs default checks"),
     Path = filename:dirname(code:which(ignore_xref)),
     ok = WriteConfig([{xref, [{config, #{dirs => [Path]}}]}]),
     AllResults = xrefr:main([]),
     [_|_] = [1 || #{check := undefined_function_calls} <- AllResults],
-    [_|_] = [1 || #{check := undefined_functions} <- AllResults],
+    [] = [1 || #{check := undefined_functions} <- AllResults],
     [_|_] = [1 || #{check := locals_not_used} <- AllResults],
-    [_|_] = [1 || #{check := exports_not_used} <- AllResults],
+    [] = [1 || #{check := exports_not_used} <- AllResults],
     [_|_] = [1 || #{check := deprecated_function_calls} <- AllResults],
-    [_|_] = [1 || #{check := deprecated_functions} <- AllResults],
+    [] = [1 || #{check := deprecated_functions} <- AllResults],
 
     ct:comment("With the proper dir, with checks, runs only those checks"),
     Path = filename:dirname(code:which(ignore_xref)),
@@ -454,17 +454,20 @@ check_as_script(_Config) ->
       WriteConfig(
         [ { xref
           , [ {config, #{dirs => [Path]}}
-            , {checks, [locals_not_used, exports_not_used]}
+            , {checks, [ undefined_functions
+                       , exports_not_used
+                       , deprecated_functions
+                       ]}
             ]
           }
         ] ),
     SomeResults1 = xrefr:main([]),
     [] = [1 || #{check := undefined_function_calls} <- SomeResults1],
-    [] = [1 || #{check := undefined_functions} <- SomeResults1],
-    [_|_] = [1 || #{check := locals_not_used} <- SomeResults1],
+    [_|_] = [1 || #{check := undefined_functions} <- SomeResults1],
+    [] = [1 || #{check := locals_not_used} <- SomeResults1],
     [_|_] = [1 || #{check := exports_not_used} <- SomeResults1],
     [] = [1 || #{check := deprecated_function_calls} <- SomeResults1],
-    [] = [1 || #{check := deprecated_functions} <- SomeResults1],
+    [_|_] = [1 || #{check := deprecated_functions} <- SomeResults1],
 
     ct:comment("With the proper dir, with checks == [], runs no check"),
     Path = filename:dirname(code:which(ignore_xref)),
