@@ -1,8 +1,8 @@
 # Change Log
 
-## [0.1.2](https://github.com/inaka/xref_runner/tree/0.1.2) (2015-03-17)
+## [0.2.0](https://github.com/inaka/xref_runner/tree/0.2.0) (2015-03-18)
 
-[Full Changelog](https://github.com/inaka/xref_runner/compare/0.1.1...HEAD)
+[Full Changelog](https://github.com/inaka/xref_runner/compare/0.1.1...0.2.0)
 
 **Closed issues:**
 
@@ -13,6 +13,10 @@
 - escriptize [\#2](https://github.com/inaka/xref_runner/issues/2)
 
 **Merged pull requests:**
+
+- If no filename, don't print :0 [\#22](https://github.com/inaka/xref_runner/pull/22) ([elbrujohalcon](https://github.com/elbrujohalcon))
+
+- Version Bump to 0.2.0 [\#21](https://github.com/inaka/xref_runner/pull/21) ([elbrujohalcon](https://github.com/elbrujohalcon))
 
 - remove useless deps [\#20](https://github.com/inaka/xref_runner/pull/20) ([elbrujohalcon](https://github.com/elbrujohalcon))
 
