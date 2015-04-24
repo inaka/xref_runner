@@ -70,7 +70,7 @@ check(Check, Config) ->
 
   lists:foreach(fun code:add_path/1, Dirs),
 
-  {ok, Xref} = xref:start(?MODULE),
+  {ok, Xref} = xref:start([]),
   try
     ok = xref:set_library_path(Xref, code_path(Config)),
 
