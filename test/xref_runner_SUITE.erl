@@ -14,6 +14,7 @@
         , check_with_config_file/1
         , check_with_no_config_file/1
         , check_as_script/1
+        , not_xref_register_himself/1
         ]).
 
 -type config() :: [{atom(), term()}].
@@ -39,6 +40,15 @@ end_per_suite(Config) ->
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Test Cases
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-spec not_xref_register_himself(config()) -> {comment, string()}.
+not_xref_register_himself(_Config) ->
+  Path = filename:dirname(code:which(deprecated_functions)),
+  Config = #{ dirs => [Path] },
+
+  ct:comment("It runs"),
+  spawn(xref_runner, check, [deprecated_functions,Config]),
+  spawn(xref_runner, check, [deprecated_functions,Config]),
+  {comment, ""}.
 
 -spec undefined_function_calls(config()) -> {comment, string()}.
 undefined_function_calls(_Config) ->
