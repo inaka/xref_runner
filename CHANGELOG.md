@@ -1,5 +1,13 @@
 # Change Log
 
+## [0.2.1](https://github.com/inaka/xref_runner/tree/0.2.1) (2015-03-19)
+
+[Full Changelog](https://github.com/inaka/xref_runner/compare/0.2.0...0.2.1)
+
+**Merged pull requests:**
+
+- Remove `exports\_not\_used` from the default list of checks [\#24](https://github.com/inaka/xref_runner/pull/24) ([elbrujohalcon](https://github.com/elbrujohalcon))
+
 ## [0.2.0](https://github.com/inaka/xref_runner/tree/0.2.0) (2015-03-18)
 
 [Full Changelog](https://github.com/inaka/xref_runner/compare/0.1.1...0.2.0)
@@ -22,13 +30,13 @@
 
 - \[Fix \#2\] Euen.2.escriptize [\#19](https://github.com/inaka/xref_runner/pull/19) ([Euen](https://github.com/Euen))
 
-- \[Fix \#2\] Euen.2.escriptize [\#18](https://github.com/inaka/xref_runner/pull/18) ([Euen](https://github.com/Euen))
-
-- \[Fix \#2\] escriptize [\#17](https://github.com/inaka/xref_runner/pull/17) ([Euen](https://github.com/Euen))
-
 - \[Fix \#10\] Add Path in check function [\#16](https://github.com/inaka/xref_runner/pull/16) ([Euen](https://github.com/Euen))
 
 - \[Fix \#9\] documentation of the function check/0 [\#15](https://github.com/inaka/xref_runner/pull/15) ([Euen](https://github.com/Euen))
+
+- \[Fix \#2\] Euen.2.escriptize [\#18](https://github.com/inaka/xref_runner/pull/18) ([Euen](https://github.com/Euen))
+
+- \[Fix \#2\] escriptize [\#17](https://github.com/inaka/xref_runner/pull/17) ([Euen](https://github.com/Euen))
 
 ## [0.1.1](https://github.com/inaka/xref_runner/tree/0.1.1) (2015-03-05)
 
