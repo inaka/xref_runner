@@ -1,5 +1,13 @@
 # Change Log
 
+## [0.2.2](https://github.com/inaka/xref_runner/tree/0.2.2) (2015-04-24)
+
+[Full Changelog](https://github.com/inaka/xref_runner/compare/0.2.1...0.2.2)
+
+**Merged pull requests:**
+
+- Davecaos.25.xref runner should not register himself on xref [\#26](https://github.com/inaka/xref_runner/pull/26) ([davecaos](https://github.com/davecaos))
+
 ## [0.2.1](https://github.com/inaka/xref_runner/tree/0.2.1) (2015-03-19)
 
 [Full Changelog](https://github.com/inaka/xref_runner/compare/0.2.0...0.2.1)
