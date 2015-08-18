@@ -32,7 +32,7 @@
                     }.
 
 -export_type([check/0, xref_default/0, config/0, warning/0]).
--export([check/0, check/1, check/2]).
+-export([check/0, check/1, check/2, find_dirs/1]).
 
 %% @doc Runs a list of checks.
 %%      To decide which checks to run and what options to use, it reads the
@@ -66,7 +66,8 @@ check(Path) ->
 -spec check(check(), config()) -> [warning()].
 check(Check, Config) ->
   XrefDefaults = maps:get(xref_defaults, Config, []),
-  Dirs = maps:get(dirs, Config, [ebin()]),
+  ConfigDirs = maps:get(dirs, Config, [ebin()]),
+  Dirs = find_dirs(ConfigDirs),
 
   lists:foreach(fun code:add_path/1, Dirs),
 
@@ -107,8 +108,15 @@ ebin() ->
   end.
 
 code_path(Config) ->
-  ExtraPaths = maps:get(extra_paths, Config, []),
-  [P || P <- code:get_path() ++ ExtraPaths, filelib:is_dir(P)].
+  ConfigExtraPaths = maps:get(extra_paths, Config, []),
+  ExtraPaths = find_dirs(ConfigExtraPaths),
+  [P || P <- code:get_path() ++ ExtraPaths].
+
+%% @doc Returns all dirs under the specified wildcard
+-spec find_dirs([file:name()]) -> [file:filename()].
+find_dirs(Dirs) ->
+    ExtraPaths = lists:flatmap(fun filelib:wildcard/1, Dirs),
+    [Path || Path <- ExtraPaths, filelib:is_dir(Path)].
 
 filter_xref_results(Check, Results) ->
   SourceModules =
@@ -143,7 +151,7 @@ get_ignorelist(Mod, Check) ->
 
   BehaviourCallbacks = get_behaviour_callbacks(Check, Mod, Attributes),
 
-  %% And create a flat {M,F,A} list
+  %% And create a flat {M, F, A} list
   IgnoreXref ++ BehaviourCallbacks.
 
 get_behaviour_callbacks(exports_not_used, Mod, Attributes) ->
