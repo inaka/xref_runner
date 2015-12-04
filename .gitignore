@@ -1,3 +1,5 @@
+xref_runner.d
+.erlang.mk/
 xrefr
 doc/
 .awconfig
