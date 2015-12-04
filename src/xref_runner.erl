@@ -110,13 +110,13 @@ ebin() ->
 code_path(Config) ->
   ConfigExtraPaths = maps:get(extra_paths, Config, []),
   ExtraPaths = find_dirs(ConfigExtraPaths),
-  [P || P <- code:get_path() ++ ExtraPaths].
+  [P || P <- code:get_path() ++ ExtraPaths, filelib:is_dir(P)].
 
 %% @doc Returns all dirs under the specified wildcard
 -spec find_dirs([file:name()]) -> [file:filename()].
 find_dirs(Dirs) ->
-    ExtraPaths = lists:flatmap(fun filelib:wildcard/1, Dirs),
-    [Path || Path <- ExtraPaths, filelib:is_dir(Path)].
+  ExtraPaths = lists:flatmap(fun filelib:wildcard/1, Dirs),
+  [Path || Path <- ExtraPaths].
 
 filter_xref_results(Check, Results) ->
   SourceModules =

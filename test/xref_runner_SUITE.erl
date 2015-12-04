@@ -389,12 +389,12 @@ check_with_config_file(_Config) ->
           }
         ] ),
     SomeResults2 = xref_runner:check("test-xref.config"),
-    [] = [1 || #{check := undefined_function_calls} <- SomeResults1],
-    [] = [1 || #{check := undefined_functions} <- SomeResults1],
-    [_|_] = [1 || #{check := locals_not_used} <- SomeResults1],
-    [_|_] = [1 || #{check := exports_not_used} <- SomeResults1],
-    [] = [1 || #{check := deprecated_function_calls} <- SomeResults1],
-    [] = [1 || #{check := deprecated_functions} <- SomeResults1],
+    [] = [1 || #{check := undefined_function_calls} <- SomeResults2],
+    [] = [1 || #{check := undefined_functions} <- SomeResults2],
+    [_|_] = [1 || #{check := locals_not_used} <- SomeResults2],
+    [_|_] = [1 || #{check := exports_not_used} <- SomeResults2],
+    [] = [1 || #{check := deprecated_function_calls} <- SomeResults2],
+    [] = [1 || #{check := deprecated_functions} <- SomeResults2],
 
     {comment, ""}
   after
