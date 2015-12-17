@@ -1,7 +1,26 @@
 # Change Log
 
-## [0.2.2](https://github.com/inaka/xref_runner/tree/0.2.2) (2015-04-24)
+## [0.2.2](https://github.com/inaka/xref_runner/tree/0.2.3) (2015-12-17)
 
+[Full Changelog](https://github.com/inaka/xref_runner/compare/0.2.2...0.2.3)
+
+**Fixed bugs:**
+
+- Bug in master [\#33](https://github.com/inaka/xref_runner/pull/33) ([igaray](https://github.com/igaray))
+
+**Closed issues:**
+
+- xref\_runner should not register himself on xref [\#25](https://github.com/inaka/xref_runner/issues/25)
+- erlang.mk integration [\#12](https://github.com/inaka/xref_runner/issues/12)
+
+**Merged pull requests:**
+
+- \* Add support of wildcards in xref.config paths. [\#30](https://github.com/inaka/xref_runner/pull/30) ([NOMORECOFFEE](https://github.com/NOMORECOFFEE))
+- Updated license [\#29](https://github.com/inaka/xref_runner/pull/29) ([spike886](https://github.com/spike886))
+- Update LICENSE [\#28](https://github.com/inaka/xref_runner/pull/28) ([andresinaka](https://github.com/andresinaka))
+- \[\#25\] Change log update to 0.2.2 [\#27](https://github.com/inaka/xref_runner/pull/27) ([davecaos](https://github.com/davecaos))
+
+## [0.2.2](https://github.com/inaka/xref_runner/tree/0.2.2) (2015-04-24)
 [Full Changelog](https://github.com/inaka/xref_runner/compare/0.2.1...0.2.2)
 
 **Merged pull requests:**
@@ -9,7 +28,6 @@
 - Davecaos.25.xref runner should not register himself on xref [\#26](https://github.com/inaka/xref_runner/pull/26) ([davecaos](https://github.com/davecaos))
 
 ## [0.2.1](https://github.com/inaka/xref_runner/tree/0.2.1) (2015-03-19)
-
 [Full Changelog](https://github.com/inaka/xref_runner/compare/0.2.0...0.2.1)
 
 **Merged pull requests:**
@@ -17,67 +35,51 @@
 - Remove `exports\_not\_used` from the default list of checks [\#24](https://github.com/inaka/xref_runner/pull/24) ([elbrujohalcon](https://github.com/elbrujohalcon))
 
 ## [0.2.0](https://github.com/inaka/xref_runner/tree/0.2.0) (2015-03-18)
-
 [Full Changelog](https://github.com/inaka/xref_runner/compare/0.1.1...0.2.0)
+
+**Fixed bugs:**
+
+- If no filename, don't print :0 [\#22](https://github.com/inaka/xref_runner/pull/22) ([elbrujohalcon](https://github.com/elbrujohalcon))
 
 **Closed issues:**
 
 - Create xref\_runner:check\(Path\) [\#10](https://github.com/inaka/xref_runner/issues/10)
-
 - Document xref\_runner:check/0 and xref.config [\#9](https://github.com/inaka/xref_runner/issues/9)
-
 - escriptize [\#2](https://github.com/inaka/xref_runner/issues/2)
 
 **Merged pull requests:**
 
-- If no filename, don't print :0 [\#22](https://github.com/inaka/xref_runner/pull/22) ([elbrujohalcon](https://github.com/elbrujohalcon))
-
 - Version Bump to 0.2.0 [\#21](https://github.com/inaka/xref_runner/pull/21) ([elbrujohalcon](https://github.com/elbrujohalcon))
-
 - remove useless deps [\#20](https://github.com/inaka/xref_runner/pull/20) ([elbrujohalcon](https://github.com/elbrujohalcon))
-
 - \[Fix \#2\] Euen.2.escriptize [\#19](https://github.com/inaka/xref_runner/pull/19) ([Euen](https://github.com/Euen))
-
 - \[Fix \#10\] Add Path in check function [\#16](https://github.com/inaka/xref_runner/pull/16) ([Euen](https://github.com/Euen))
-
 - \[Fix \#9\] documentation of the function check/0 [\#15](https://github.com/inaka/xref_runner/pull/15) ([Euen](https://github.com/Euen))
 
-- \[Fix \#2\] Euen.2.escriptize [\#18](https://github.com/inaka/xref_runner/pull/18) ([Euen](https://github.com/Euen))
-
-- \[Fix \#2\] escriptize [\#17](https://github.com/inaka/xref_runner/pull/17) ([Euen](https://github.com/Euen))
-
 ## [0.1.1](https://github.com/inaka/xref_runner/tree/0.1.1) (2015-03-05)
-
 [Full Changelog](https://github.com/inaka/xref_runner/compare/0.1.0...0.1.1)
 
-**Merged pull requests:**
+**Fixed bugs:**
 
 - Remove the mod part of the application definition [\#14](https://github.com/inaka/xref_runner/pull/14) ([elbrujohalcon](https://github.com/elbrujohalcon))
 
 ## [0.1.0](https://github.com/inaka/xref_runner/tree/0.1.0) (2015-03-04)
-
 [Full Changelog](https://github.com/inaka/xref_runner/compare/0.0.2...0.1.0)
 
-**Merged pull requests:**
+**Fixed bugs:**
 
 - Fix the app name [\#13](https://github.com/inaka/xref_runner/pull/13) ([elbrujohalcon](https://github.com/elbrujohalcon))
 
 ## [0.0.2](https://github.com/inaka/xref_runner/tree/0.0.2) (2015-02-23)
-
 [Full Changelog](https://github.com/inaka/xref_runner/compare/0.0.1...0.0.2)
 
 **Merged pull requests:**
 
 - Add Dirs to the code path [\#11](https://github.com/inaka/xref_runner/pull/11) ([elbrujohalcon](https://github.com/elbrujohalcon))
-
 - Version Bump [\#8](https://github.com/inaka/xref_runner/pull/8) ([elbrujohalcon](https://github.com/elbrujohalcon))
-
 - Create check/0 that performs several checks according to xref.config file [\#7](https://github.com/inaka/xref_runner/pull/7) ([elbrujohalcon](https://github.com/elbrujohalcon))
-
 - elvis.config [\#6](https://github.com/inaka/xref_runner/pull/6) ([elbrujohalcon](https://github.com/elbrujohalcon))
 
 ## [0.0.1](https://github.com/inaka/xref_runner/tree/0.0.1) (2015-02-09)
-
 **Closed issues:**
 
 - Tests [\#5](https://github.com/inaka/xref_runner/issues/5)
@@ -85,9 +87,7 @@
 **Merged pull requests:**
 
 - \[\#1\] Initial structure [\#4](https://github.com/inaka/xref_runner/pull/4) ([elbrujohalcon](https://github.com/elbrujohalcon))
-
 - Fulfil the open-source checklist [\#3](https://github.com/inaka/xref_runner/pull/3) ([elbrujohalcon](https://github.com/elbrujohalcon))
-
 - The Module [\#1](https://github.com/inaka/xref_runner/pull/1) ([elbrujohalcon](https://github.com/elbrujohalcon))
 
 
