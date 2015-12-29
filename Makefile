@@ -3,7 +3,7 @@ PROJECT = xref_runner
 DEPS = getopt
 LOCAL_DEPS := tools
 
-dep_getopt = git https://github.com/jcomellas/getopt v0.8.2
+dep_getopt = hex 0.8.2
 
 DIALYZER_DIRS := ebin/ test/
 DIALYZER_OPTS := --verbose --statistics -Wunmatched_returns
