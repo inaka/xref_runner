@@ -1,7 +1,13 @@
 # Change Log
 
-## [0.2.2](https://github.com/inaka/xref_runner/tree/0.2.3) (2015-12-17)
+## [0.2.4](https://github.com/inaka/xref_runner/tree/0.2.4) (2015-12-29)
+[Full Changelog](https://github.com/inaka/xref_runner/compare/0.2.3...0.2.4)
 
+**Merged pull requests:**
+
+- \[\#32\] Updated for hexer hex package tool [\#37](https://github.com/inaka/xref_runner/pull/37) ([davecaos](https://github.com/davecaos))
+
+## [0.2.3](https://github.com/inaka/xref_runner/tree/0.2.3) (2015-12-17)
 [Full Changelog](https://github.com/inaka/xref_runner/compare/0.2.2...0.2.3)
 
 **Fixed bugs:**
@@ -10,11 +16,13 @@
 
 **Closed issues:**
 
+- Bump version to 0.2.3 [\#35](https://github.com/inaka/xref_runner/issues/35)
 - xref\_runner should not register himself on xref [\#25](https://github.com/inaka/xref_runner/issues/25)
 - erlang.mk integration [\#12](https://github.com/inaka/xref_runner/issues/12)
 
 **Merged pull requests:**
 
+- \[Closes \#35\] Bump version to 0.2.3 [\#36](https://github.com/inaka/xref_runner/pull/36) ([jfacorro](https://github.com/jfacorro))
 - \* Add support of wildcards in xref.config paths. [\#30](https://github.com/inaka/xref_runner/pull/30) ([NOMORECOFFEE](https://github.com/NOMORECOFFEE))
 - Updated license [\#29](https://github.com/inaka/xref_runner/pull/29) ([spike886](https://github.com/spike886))
 - Update LICENSE [\#28](https://github.com/inaka/xref_runner/pull/28) ([andresinaka](https://github.com/andresinaka))
