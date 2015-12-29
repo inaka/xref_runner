@@ -10,7 +10,7 @@
     , erl_interface
     ]},
    {modules, []},
-   {registered, []}
+   {registered, []},
    {maintainers, ["Inaka"]},
    {licenses, ["Apache 2.0"]},
    {links, [{"Github", "https://github.com/inaka/xref_runner"}]},
