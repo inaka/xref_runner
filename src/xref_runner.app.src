@@ -2,7 +2,7 @@
   application, xref_runner,
   [
    {description, "Xref Runner"},
-   {vsn, "0.2.4"},
+   {vsn, "0.2.5"},
    {applications,
     [ kernel
     , stdlib

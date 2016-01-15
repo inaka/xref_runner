@@ -1,10 +1,24 @@
 # Change Log
 
+## [0.2.5](https://github.com/inaka/xref_runner/tree/0.2.5) (2016-01-15)
+[Full Changelog](https://github.com/inaka/xref_runner/compare/0.2.4...0.2.5)
+
+**Closed issues:**
+
+- Version bump to 0.2.4 [\#38](https://github.com/inaka/xref_runner/issues/38)
+- Hex Package [\#32](https://github.com/inaka/xref_runner/issues/32)
+
+**Merged pull requests:**
+
+- Switch build tools to erlang.mk and republish to hex.pm [\#42](https://github.com/inaka/xref_runner/pull/42) ([elbrujohalcon](https://github.com/elbrujohalcon))
+
 ## [0.2.4](https://github.com/inaka/xref_runner/tree/0.2.4) (2015-12-29)
 [Full Changelog](https://github.com/inaka/xref_runner/compare/0.2.3...0.2.4)
 
 **Merged pull requests:**
 
+- \[\#38\] Fixed xref\_runner.app.src file [\#41](https://github.com/inaka/xref_runner/pull/41) ([davecaos](https://github.com/davecaos))
+- \[\#38\] Version Bump 0.2.4 [\#39](https://github.com/inaka/xref_runner/pull/39) ([davecaos](https://github.com/davecaos))
 - \[\#32\] Updated for hexer hex package tool [\#37](https://github.com/inaka/xref_runner/pull/37) ([davecaos](https://github.com/davecaos))
 
 ## [0.2.3](https://github.com/inaka/xref_runner/tree/0.2.3) (2015-12-17)
