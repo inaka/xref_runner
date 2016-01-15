@@ -13,7 +13,9 @@
    {registered, []},
    {maintainers, ["Inaka"]},
    {licenses, ["Apache 2.0"]},
-   {links, [{"Github", "https://github.com/inaka/xref_runner"}]},
-   {build_tools, ["make","rebar"]}
+   {links, [ {"Github", "https://github.com/inaka/xref_runner"}
+           , {"Docs", "http://inaka.github.io/xref_runner/"}
+           ]},
+   {build_tools, ["erlang.mk","rebar"]}
   ]
 }.
