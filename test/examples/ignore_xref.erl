@@ -10,7 +10,7 @@ bad() ->
   deprecated_functions:deprecated().
 
 bad(1) ->
-  ignore_xref:internal(),
+  _ = ignore_xref:internal(),
   deprecated_functions:deprecated(1).
 
 good() ->

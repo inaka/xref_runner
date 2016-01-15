@@ -8,7 +8,7 @@
 
 %% @doc Allows us to runs xref_runner as script.
 %%      This can be generated executing make escript
--spec main([string()]) -> ok.
+-spec main(string()) -> ok | [xref_runner:warning()].
 main(Args) ->
   OptSpecList = option_spec_list(),
   case getopt:parse(OptSpecList, Args) of
@@ -44,7 +44,7 @@ option_spec_list() ->
 
 %% @doc Identifies the argument and executes the corresponding functions
 %%      depending if these are "-h --help", "-c --config" or empty.
--spec process_options([atom()]) -> ok.
+-spec process_options([atom()]) -> ok | [xref_runner:warning()].
 process_options([help | _Opts]) ->
   help();
 process_options([{config, Path} | _Opts]) ->

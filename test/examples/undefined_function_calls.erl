@@ -1,5 +1,7 @@
 -module(undefined_function_calls).
 
+-dialyzer([{nowarn_function, [bad/1, bad/0]}]).
+
 -export([bad/0, bad/1]).
 
 bad() ->
