@@ -46,8 +46,8 @@ not_xref_register_himself(_Config) ->
   Config = #{ dirs => [Path] },
 
   ct:comment("It runs"),
-  spawn(xref_runner, check, [deprecated_functions,Config]),
-  spawn(xref_runner, check, [deprecated_functions,Config]),
+  spawn(xref_runner, check, [deprecated_functions, Config]),
+  spawn(xref_runner, check, [deprecated_functions, Config]),
   {comment, ""}.
 
 -spec undefined_function_calls(config()) -> {comment, string()}.
@@ -64,7 +64,7 @@ undefined_function_calls(_Config) ->
   ct:comment(
     "It contains a warning for undefined_function_calls:undefined_here()"),
   [W1] =
-    [ W || #{ line      := 5 % Where the function is defined
+    [ W || #{ line      := 7 % Where the function is defined
             , source    := {undefined_function_calls, bad, 0}
             , target    := {undefined_function_calls, undefined_here, 0}
             } = W <- Warnings],
@@ -72,7 +72,7 @@ undefined_function_calls(_Config) ->
   ct:comment(
     "It contains a warning for undefined_functions:undefined_there()"),
   [W2] =
-    [ W || #{ line      := 9 % Where the function is defined
+    [ W || #{ line      := 11 % Where the function is defined
             , source    := {undefined_function_calls, bad, 1}
             , target    := {undefined_functions, undefined_there, 0}
             } = W <- Warnings],
@@ -80,7 +80,7 @@ undefined_function_calls(_Config) ->
   ct:comment(
     "It contains a warning for other_module:undefined_somewhere_else(_)"),
   [W3] =
-    [ W || #{ line      := 9 % Where the function is defined
+    [ W || #{ line      := 11 % Where the function is defined
             , source    := {undefined_function_calls, bad, 1}
             , target    := {other_module, undefined_somewhere_else, 1}
             } = W <- Warnings],
@@ -136,7 +136,7 @@ locals_not_used(_Config) ->
   ct:comment(
     "It contains a warning for locals_not_used:local_not()"),
   [W1] =
-    [ W || #{ line      := 9
+    [ W || #{ line      := 11
             , source    := {locals_not_used, local_not, 1}
             } = W <- Warnings],
 
@@ -280,17 +280,18 @@ check_with_no_config_file(_Config) ->
   [] = xref_runner:check(),
 
   ct:comment("cd to the right folder"),
-  OldCwd = file:get_cwd(),
+  {ok, OldCwd} = file:get_cwd(),
   try
     Path = filename:dirname(code:which(ignore_xref)),
-    file:set_cwd(Path),
+    ok = file:set_cwd(Path),
 
     ct:comment("Run the checks with an empty ebin folder"),
-    case filelib:is_dir("ebin") of
-      true -> file:del_dir("ebin");
-      false -> ok
-    end,
-    file:make_dir("ebin"),
+    ok =
+      case filelib:is_dir("ebin") of
+        true -> file:del_dir("ebin");
+        false -> ok
+      end,
+    ok = file:make_dir("ebin"),
     [] = xref_runner:check(),
 
     ct:comment("Run the checks in the right folder, without ebin"),
@@ -326,7 +327,7 @@ check_with_config_file(_Config) ->
       file:write_file("test-xref.config", io_lib:format("~p.", [Config]))
     end,
 
-  OldCwd = file:get_cwd(),
+  {ok, OldCwd} = file:get_cwd(),
 
   try
     ct:comment("Empty config works as if there is no config"),
@@ -398,8 +399,8 @@ check_with_config_file(_Config) ->
 
     {comment, ""}
   after
-    file:delete("xref.config"),
-    file:delete("test-xref.config"),
+    _ = file:delete("xref.config"),
+    _ = file:delete("test-xref.config"),
     file:set_cwd(OldCwd)
   end.
 
@@ -420,12 +421,12 @@ check_as_script(_Config) ->
       file:write_file("test-xref.config", io_lib:format("~p.", [Config]))
     end,
 
-  OldCwd = file:get_cwd(),
+  {ok, OldCwd} = file:get_cwd(),
 
   try
     ct:comment("Invalid argument"),
     try xrefr:main("-g") of
-      R -> no_result = R
+      R -> ct:fail("Unexpected result ~p", [R])
     catch
       _:halt -> ok
     end,
@@ -511,7 +512,7 @@ check_as_script(_Config) ->
 
     {comment, ""}
   after
-    file:delete("xref.config"),
-    file:delete("test-xref.config"),
+    _ = file:delete("xref.config"),
+    _ = file:delete("test-xref.config"),
     file:set_cwd(OldCwd)
   end.

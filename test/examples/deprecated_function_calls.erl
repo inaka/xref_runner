@@ -8,7 +8,7 @@ bad() ->
   deprecated_functions:deprecated().
 
 bad(1) ->
-  deprecated_function_calls:internal(),
+  _ = deprecated_function_calls:internal(),
   deprecated_functions:deprecated(1).
 
 good() ->

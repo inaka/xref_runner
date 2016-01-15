@@ -27,13 +27,13 @@ init_per_testcase(_Name, Config) ->
             X <- ["a", "b", "c", "dd"],
             Y <- ["", "ebin"]
     ],
-    [file:make_dir(Dir) || Dir <- Dirs],
+    lists:foreach(fun file:make_dir/1, Dirs),
     [{dirs, Dirs} | Config].
 
 end_per_testcase(_Name, Config) ->
     Dirs = ?config(dirs, Config),
-    [file:del_dir(Dir) || Dir <- Dirs],
-    ok.
+    lists:foreach(fun file:del_dir/1, Dirs),
+    Config.
 
 empty_list_dir(_Config) ->
     [] = xref_runner:find_dirs([]).
