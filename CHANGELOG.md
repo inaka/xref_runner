@@ -1,5 +1,16 @@
 # Change Log
 
+## [0.2.6](https://github.com/inaka/xref_runner/tree/0.2.6) (2016-01-19)
+[Full Changelog](https://github.com/inaka/xref_runner/compare/0.2.5...0.2.6)
+
+**Fixed bugs:**
+
+- Modify IGNORE\_DEPS in Makefile [\#44](https://github.com/inaka/xref_runner/issues/44)
+
+**Merged pull requests:**
+
+- \[Fix \#44\] modify IGNORE DEPS [\#46](https://github.com/inaka/xref_runner/pull/46) ([Euen](https://github.com/Euen))
+
 ## [0.2.5](https://github.com/inaka/xref_runner/tree/0.2.5) (2016-01-15)
 [Full Changelog](https://github.com/inaka/xref_runner/compare/0.2.4...0.2.5)
 
@@ -10,6 +21,7 @@
 
 **Merged pull requests:**
 
+- Version Bump to 0.2.5 [\#43](https://github.com/inaka/xref_runner/pull/43) ([elbrujohalcon](https://github.com/elbrujohalcon))
 - Switch build tools to erlang.mk and republish to hex.pm [\#42](https://github.com/inaka/xref_runner/pull/42) ([elbrujohalcon](https://github.com/elbrujohalcon))
 
 ## [0.2.4](https://github.com/inaka/xref_runner/tree/0.2.4) (2015-12-29)
