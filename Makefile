@@ -6,7 +6,7 @@ TEST_DEPS := katana mixer
 BUILD_DEPS = inaka_mk hexer_mk
 
 # Prevents erlang.mk from downloading katana's xref_runner dependency
-IGNORE_DEPS = xref_runner
+IGNORE_DEPS += xref_runner
 
 dep_getopt = hex 0.8.2
 dep_katana = hex 0.2.19
