@@ -32,7 +32,7 @@
                     }.
 
 -export_type([check/0, xref_default/0, config/0, warning/0]).
--export([check/0, check/1, check/2, find_dirs/1]).
+-export([check/0, check/1, check/2, find_dirs/1, ebin/0]).
 
 %% @doc Runs a list of checks.
 %%      To decide which checks to run and what options to use, it reads the
@@ -100,12 +100,32 @@ default_checks() ->
   , locals_not_used
   , deprecated_function_calls
   ].
-
+-spec ebin() -> any().
 ebin() ->
-  case filelib:is_dir("ebin") of
-    true -> filename:absname("ebin");
-    false -> filename:absname(".")
+  hd([Path || Path <- [rebar3_path(), erlangmk_path(), default_path()],
+              Path =/= undefined]).
+
+rebar3_path() ->
+  case filelib:is_dir("_build/default/lib") of
+    true  ->
+      Dir = filename:absname("_build/default/lib"),
+      AppName = atom_to_list(current_app_name()),
+      [Dir, "/" , AppName, "/ebin/"];
+    false -> undefined
   end.
+
+erlangmk_path() ->
+  case filelib:is_dir("ebin") of
+    true  -> filename:absname("ebin");
+    false -> undefined
+  end.
+
+default_path() -> ".".
+
+current_app_name() ->
+  [File] = filelib:wildcard("src/*.app.src"),
+  {ok, [{application, AppName, _}]} = file:consult(File),
+  AppName.
 
 code_path(Config) ->
   ConfigExtraPaths = maps:get(extra_paths, Config, []),
