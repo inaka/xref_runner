@@ -100,12 +100,32 @@ default_checks() ->
   , locals_not_used
   , deprecated_function_calls
   ].
-
+-spec ebin() -> file:name_all().
 ebin() ->
-  case filelib:is_dir("ebin") of
-    true -> filename:absname("ebin");
-    false -> filename:absname(".")
+  hd([Path || Path <- [rebar3_path(), erlangmk_path(), default_path()],
+              Path =/= undefined]).
+
+rebar3_path() ->
+  case filelib:is_dir("_build/default/lib") of
+    true  ->
+      Dir = filename:absname("_build/default/lib"),
+      AppName = atom_to_list(current_app_name()),
+      filename:join([Dir, AppName, "ebin"]);
+    false -> undefined
   end.
+
+erlangmk_path() ->
+  case filelib:is_dir("ebin") of
+    true  -> filename:absname("ebin");
+    false -> undefined
+  end.
+
+default_path() -> ".".
+
+current_app_name() ->
+  {ok, File} = find_single_file(["ebin/*.app", "src/*.app.src"]),
+  {ok, [{application, AppName, _}]} = file:consult(File),
+  AppName.
 
 code_path(Config) ->
   ConfigExtraPaths = maps:get(extra_paths, Config, []),
@@ -213,4 +233,13 @@ find_function_source(M, F, A, Bin) ->
     %% are not in the source.
     %% parameterized modules add new/1 and instance/1 for example.
     [] -> {Source, 0}
+  end.
+
+-spec find_single_file([string()]) -> {ok, string()} | notfound.
+find_single_file([]) ->
+  notfound;
+find_single_file([Pattern | Patterns]) ->
+  case filelib:wildcard(Pattern) of
+    [] -> find_single_file(Patterns);
+    [File | _] -> {ok, File}
   end.
