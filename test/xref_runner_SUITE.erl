@@ -79,8 +79,8 @@ check_rebar3_build_fail(_Config) ->
   #{ line      := 9
    , check     := undefined_function_calls
    , filename  := "test/examples/erlang-repo-fail/src/erlang_repo_sup.erl"
-   , source    := {erlang_repo_sup,init, 1}
-   , target    := {erlang_repo_app,non_exist_function, 0}
+   , source    := {erlang_repo_sup, init, 1}
+   , target    := {erlang_repo_app, non_exist_function, 0}
    } = Warning,
 
   file:set_cwd(OldCwd),
