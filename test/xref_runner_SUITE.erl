@@ -15,6 +15,8 @@
         , check_with_no_config_file/1
         , check_as_script/1
         , not_xref_register_himself/1
+        , check_rebar3_build/1
+        , check_rebar3_build_fail/1
         ]).
 
 -type config() :: [{atom(), term()}].
@@ -49,6 +51,47 @@ not_xref_register_himself(_Config) ->
   spawn(xref_runner, check, [deprecated_functions, Config]),
   spawn(xref_runner, check, [deprecated_functions, Config]),
   {comment, ""}.
+
+-spec check_rebar3_build(config()) -> {comment, string()}.
+check_rebar3_build(_Config) ->
+  Path = "../../test/examples/erlang-repo",
+  ct:comment("It runs"),
+  {ok, OldCwd} = file:get_cwd(),
+  file:set_cwd(Path),
+  RepoName = "erlang-repo",
+  rebar3_clean(RepoName),
+  rebar3_compile(RepoName),
+  [] = xref_runner:check(),
+  file:set_cwd(OldCwd),
+  {comment, ""}.
+
+-spec check_rebar3_build_fail(config()) -> {comment, string()}.
+check_rebar3_build_fail(_Config) ->
+  Path = "../../test/examples/erlang-repo-fail",
+  ct:comment("It runs"),
+  {ok, OldCwd} = file:get_cwd(),
+  file:set_cwd(Path),
+  RepoName = "erlang-repo-fail",
+  rebar3_clean(RepoName),
+  rebar3_compile(RepoName),
+  [Warning] = xref_runner:check(),
+
+  #{ line      := 9
+   , check     := undefined_function_calls
+   , filename  := "test/examples/erlang-repo-fail/src/erlang_repo_sup.erl"
+   , source    := {erlang_repo_sup,init, 1}
+   , target    := {erlang_repo_app,non_exist_function, 0}
+   } = Warning,
+
+  file:set_cwd(OldCwd),
+  {comment, ""}.
+
+rebar3_clean(RepoName) ->
+  os:cmd("rebar3 clean " ++ RepoName).
+
+rebar3_compile(RepoName) ->
+  os:cmd("rebar3 compile " ++ RepoName).
+
 
 -spec undefined_function_calls(config()) -> {comment, string()}.
 undefined_function_calls(_Config) ->

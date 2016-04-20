@@ -1,0 +1,19 @@
+{
+  application, erlang_repo,
+  [
+   {description, "erlang repo"},
+   {vsn, git},
+   {applications,
+    [ erts
+    , kernel
+    , stdlib
+    ]},
+   {mod, {erlang_repo_app, []}},
+   {modules,
+    []
+   },
+   {registered, []},
+   {start_phases,
+    []}
+  ]
+}.

@@ -32,7 +32,7 @@
                     }.
 
 -export_type([check/0, xref_default/0, config/0, warning/0]).
--export([check/0, check/1, check/2, find_dirs/1, ebin/0]).
+-export([check/0, check/1, check/2, find_dirs/1]).
 
 %% @doc Runs a list of checks.
 %%      To decide which checks to run and what options to use, it reads the
