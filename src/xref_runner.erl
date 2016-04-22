@@ -219,7 +219,7 @@ find_function_source(M, F, A, Bin) ->
   {ok, {M, [{abstract_code, {raw_abstract_v1, Code}}]}} = AbstractCode,
 
   %% Extract the original source filename from the abstract code
-  [Source|_] = [S || {attribute, _, file, {S, _}} <- Code]
+  [Source|_] = [S || {attribute, _, file, {S, _}} <- Code],
 
   %% Extract the line number for a given function def
   Fn = [E || E <- Code,
