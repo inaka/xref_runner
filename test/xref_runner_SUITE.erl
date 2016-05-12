@@ -54,7 +54,7 @@ not_xref_register_himself(_Config) ->
 
 -spec check_rebar3_build(config()) -> {comment, string()}.
 check_rebar3_build(_Config) ->
-  Path = "../../test/examples/erlang-repo",
+  Path = "../../lib/xref_runner/test/examples/erlang-repo",
   ct:comment("It runs"),
   {ok, OldCwd} = file:get_cwd(),
   ok = file:set_cwd(Path),
@@ -67,7 +67,7 @@ check_rebar3_build(_Config) ->
 
 -spec check_rebar3_build_fail(config()) -> {comment, string()}.
 check_rebar3_build_fail(_Config) ->
-  Path = "../../test/examples/erlang-repo-fail",
+  Path = "../../lib/xref_runner/test/examples/erlang-repo-fail",
   ct:comment("It runs"),
   {ok, OldCwd} = file:get_cwd(),
   ok = file:set_cwd(Path),
@@ -493,6 +493,7 @@ check_as_script(_Config) ->
 
     ct:comment("With the proper dir, but no checks, runs default checks"),
     Path = filename:dirname(code:which(ignore_xref)),
+    ct:pal("TestPath:: ~p", [filename:absname(Path)]),
     ok = WriteConfig([{xref, [{config, #{dirs => [Path]}}]}]),
     AllResults = xrefr:main([]),
     [_|_] = [1 || #{check := undefined_function_calls} <- AllResults],
