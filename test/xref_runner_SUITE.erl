@@ -57,12 +57,12 @@ check_rebar3_build(_Config) ->
   Path = "../../test/examples/erlang-repo",
   ct:comment("It runs"),
   {ok, OldCwd} = file:get_cwd(),
-  file:set_cwd(Path),
+  ok = file:set_cwd(Path),
   RepoName = "erlang-repo",
-  rebar3_clean(RepoName),
-  rebar3_compile(RepoName),
+  _ = rebar3_clean(RepoName),
+  _ = rebar3_compile(RepoName),
   [] = xref_runner:check(),
-  file:set_cwd(OldCwd),
+  ok = file:set_cwd(OldCwd),
   {comment, ""}.
 
 -spec check_rebar3_build_fail(config()) -> {comment, string()}.
@@ -70,10 +70,10 @@ check_rebar3_build_fail(_Config) ->
   Path = "../../test/examples/erlang-repo-fail",
   ct:comment("It runs"),
   {ok, OldCwd} = file:get_cwd(),
-  file:set_cwd(Path),
+  ok = file:set_cwd(Path),
   RepoName = "erlang-repo-fail",
-  rebar3_clean(RepoName),
-  rebar3_compile(RepoName),
+  _ = rebar3_clean(RepoName),
+  _ = rebar3_compile(RepoName),
   [Warning] = xref_runner:check(),
 
   #{ line      := 9
@@ -83,7 +83,7 @@ check_rebar3_build_fail(_Config) ->
    , target    := {erlang_repo_app, non_exist_function, 0}
    } = Warning,
 
-  file:set_cwd(OldCwd),
+  ok = file:set_cwd(OldCwd),
   {comment, ""}.
 
 rebar3_clean(RepoName) ->
