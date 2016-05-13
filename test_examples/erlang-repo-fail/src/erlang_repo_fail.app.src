@@ -1,5 +1,5 @@
 {
-  application, erlang_repo,
+  application, erlang_repo_fail,
   [
    {description, "erlang repo"},
    {vsn, git},
@@ -8,7 +8,7 @@
     , kernel
     , stdlib
     ]},
-   {mod, {erlang_repo_app, []}},
+   {mod, {erlang_repo_fail_app, []}},
    {modules,
     []
    },

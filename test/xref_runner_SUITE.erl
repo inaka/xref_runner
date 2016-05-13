@@ -54,36 +54,41 @@ not_xref_register_himself(_Config) ->
 
 -spec check_rebar3_build(config()) -> {comment, string()}.
 check_rebar3_build(_Config) ->
-  Path = "../../test/examples/erlang-repo",
+  Path = "../../lib/xref_runner/test_examples/erlang-repo",
   ct:comment("It runs"),
   {ok, OldCwd} = file:get_cwd(),
-  file:set_cwd(Path),
+  ok = file:set_cwd(Path),
   RepoName = "erlang-repo",
-  rebar3_clean(RepoName),
-  rebar3_compile(RepoName),
+  _ = rebar3_clean(RepoName),
+  _ = rebar3_compile(RepoName),
   [] = xref_runner:check(),
-  file:set_cwd(OldCwd),
+  ok = file:set_cwd(OldCwd),
   {comment, ""}.
 
 -spec check_rebar3_build_fail(config()) -> {comment, string()}.
 check_rebar3_build_fail(_Config) ->
-  Path = "../../test/examples/erlang-repo-fail",
+  Path = "../../lib/xref_runner/test_examples/erlang-repo-fail",
   ct:comment("It runs"),
   {ok, OldCwd} = file:get_cwd(),
-  file:set_cwd(Path),
+  ok = file:set_cwd(Path),
   RepoName = "erlang-repo-fail",
-  rebar3_clean(RepoName),
-  rebar3_compile(RepoName),
+  _ = rebar3_clean(RepoName),
+  _ = rebar3_compile(RepoName),
   [Warning] = xref_runner:check(),
 
   #{ line      := 9
    , check     := undefined_function_calls
-   , filename  := "test/examples/erlang-repo-fail/src/erlang_repo_sup.erl"
-   , source    := {erlang_repo_sup, init, 1}
-   , target    := {erlang_repo_app, non_exist_function, 0}
+   , filename  := Filename
+   , source    := {erlang_repo_fail_sup, init, 1}
+   , target    := {erlang_repo_fail_app, non_exist_function, 0}
    } = Warning,
 
-  file:set_cwd(OldCwd),
+  case string:str(Filename, "erlang_repo_fail_sup.erl") of
+    0 -> ct:fail("Incorrect filename: " ++ Filename);
+    _ -> ok
+  end,
+
+  ok = file:set_cwd(OldCwd),
   {comment, ""}.
 
 rebar3_clean(RepoName) ->
@@ -95,7 +100,7 @@ rebar3_compile(RepoName) ->
 
 -spec undefined_function_calls(config()) -> {comment, string()}.
 undefined_function_calls(_Config) ->
-  Path = filename:dirname(code:which(undefined_function_calls)),
+  Path = get_path("undefined_function_calls"),
   Config = #{ dirs => [Path] },
 
   ct:comment("It runs"),
@@ -135,7 +140,7 @@ undefined_function_calls(_Config) ->
 
 -spec undefined_functions(config()) -> {comment, string()}.
 undefined_functions(_Config) ->
-  Path = filename:dirname(code:which(undefined_functions)),
+  Path = get_path("undefined_functions"),
   Config = #{ dirs => [Path]
             , xref_defaults => []
             },
@@ -167,7 +172,7 @@ undefined_functions(_Config) ->
 
 -spec locals_not_used(config()) -> {comment, string()}.
 locals_not_used(_Config) ->
-  Path = filename:dirname(code:which(locals_not_used)),
+  Path = get_path("locals_not_used"),
   Config = #{ dirs => [Path] },
 
   ct:comment("It runs"),
@@ -190,7 +195,7 @@ locals_not_used(_Config) ->
 
 -spec exports_not_used(config()) -> {comment, string()}.
 exports_not_used(_Config) ->
-  Path = filename:dirname(code:which(exports_not_used)),
+  Path = get_path("exports_not_used"),
   Config = #{ dirs => [Path] },
 
   ct:comment("It runs"),
@@ -213,7 +218,7 @@ exports_not_used(_Config) ->
 
 -spec deprecated_function_calls(config()) -> {comment, string()}.
 deprecated_function_calls(_Config) ->
-  Path = filename:dirname(code:which(deprecated_function_calls)),
+  Path = get_path("deprecated_function_calls"),
   Config = #{ dirs => [Path] },
 
   ct:comment("It runs"),
@@ -253,7 +258,7 @@ deprecated_function_calls(_Config) ->
 
 -spec deprecated_functions(config()) -> {comment, string()}.
 deprecated_functions(_Config) ->
-  Path = filename:dirname(code:which(deprecated_functions)),
+  Path = get_path("deprecated_functions"),
   Config = #{ dirs => [Path] },
 
   ct:comment("It runs"),
@@ -283,7 +288,7 @@ deprecated_functions(_Config) ->
 
 -spec ignore_xref(config()) -> {comment, string()}.
 ignore_xref(_Config) ->
-  Path = filename:dirname(code:which(ignore_xref)),
+  Path = get_path("ignore_xref"),
   Config = #{ dirs => [Path] },
 
   ct:comment("It runs"),
@@ -325,7 +330,7 @@ check_with_no_config_file(_Config) ->
   ct:comment("cd to the right folder"),
   {ok, OldCwd} = file:get_cwd(),
   try
-    Path = filename:dirname(code:which(ignore_xref)),
+    Path = get_path("ignore_xref"),
     ok = file:set_cwd(Path),
 
     ct:comment("Run the checks with an empty ebin folder"),
@@ -382,7 +387,7 @@ check_with_config_file(_Config) ->
     [] = xref_runner:check(),
 
     ct:comment("With the proper dir, but no checks, runs default checks"),
-    Path = filename:dirname(code:which(ignore_xref)),
+    Path = get_path("ignore_xref"),
     ok = WriteConfig([{xref, [{config, #{dirs => [Path]}}]}]),
     AllResults = xref_runner:check(),
     [_|_] = [1 || #{check := undefined_function_calls} <- AllResults],
@@ -393,7 +398,6 @@ check_with_config_file(_Config) ->
     [] = [1 || #{check := deprecated_functions} <- AllResults],
 
     ct:comment("With the proper dir, with checks, runs only those checks"),
-    Path = filename:dirname(code:which(ignore_xref)),
     ok =
       WriteConfig(
         [ { xref
@@ -411,7 +415,6 @@ check_with_config_file(_Config) ->
     [] = [1 || #{check := deprecated_functions} <- SomeResults1],
 
     ct:comment("With the proper dir, with checks == [], runs no check"),
-    Path = filename:dirname(code:which(ignore_xref)),
     ok =
       WriteConfig(
         [ { xref
@@ -423,7 +426,6 @@ check_with_config_file(_Config) ->
     [] = xref_runner:check(),
 
     ct:comment("With the proper dir, with checks, specifying xref.config path"),
-    Path = filename:dirname(code:which(ignore_xref)),
     ok =
       WriteTestConfig(
         [ { xref
@@ -492,7 +494,7 @@ check_as_script(_Config) ->
     [] = xrefr:main([]),
 
     ct:comment("With the proper dir, but no checks, runs default checks"),
-    Path = filename:dirname(code:which(ignore_xref)),
+    Path = get_path("ignore_xref"),
     ok = WriteConfig([{xref, [{config, #{dirs => [Path]}}]}]),
     AllResults = xrefr:main([]),
     [_|_] = [1 || #{check := undefined_function_calls} <- AllResults],
@@ -503,7 +505,6 @@ check_as_script(_Config) ->
     [] = [1 || #{check := deprecated_functions} <- AllResults],
 
     ct:comment("With the proper dir, with checks, runs only those checks"),
-    Path = filename:dirname(code:which(ignore_xref)),
     ok =
       WriteConfig(
         [ { xref
@@ -524,7 +525,6 @@ check_as_script(_Config) ->
     [_|_] = [1 || #{check := deprecated_functions} <- SomeResults1],
 
     ct:comment("With the proper dir, with checks == [], runs no check"),
-    Path = filename:dirname(code:which(ignore_xref)),
     ok =
       WriteConfig(
         [ { xref
@@ -536,7 +536,6 @@ check_as_script(_Config) ->
     [] = xrefr:main([]),
 
     ct:comment("With the proper dir, with checks, specifying xref.config path"),
-    Path = filename:dirname(code:which(ignore_xref)),
     ok =
       WriteTestConfig(
         [ { xref
@@ -559,3 +558,7 @@ check_as_script(_Config) ->
     _ = file:delete("test-xref.config"),
     file:set_cwd(OldCwd)
   end.
+
+get_path(Module) ->
+  [BeamPath] = filelib:wildcard("../../**/" ++ Module ++ ".beam"),
+  filename:dirname(BeamPath).

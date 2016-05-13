@@ -1,4 +1,4 @@
-PROJECT = erlang_repo
+PROJECT = erlang_repo_fail
 BUILD_DEPS = inaka_mk
 DEP_PLUGINS = inaka_mk
 
