@@ -60,7 +60,6 @@ check(Path) ->
         end;
       {error, enoent} -> {default_checks(), #{}}
     end,
-  ct:pal("Checks ~p Config ~p Path ~p File: ~p FILES ~p", [Checks, Config, filename:absname("."), file:consult(Path), filelib:wildcard("./*")]),
   lists:append([check(Check, Config) || Check <- Checks]).
 
 %% @doc Runs a check on the dirs and with the options provided on Config.
