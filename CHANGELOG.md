@@ -1,5 +1,22 @@
 # Change Log
 
+## [1.0.0](https://github.com/inaka/xref_runner/tree/1.0.0) (2016-05-13)
+[Full Changelog](https://github.com/inaka/xref_runner/compare/0.2.6...1.0.0)
+
+**Closed issues:**
+
+- Move from erlang.mk to rebar3 [\#54](https://github.com/inaka/xref_runner/issues/54)
+- Broken for modules created with Elixir [\#52](https://github.com/inaka/xref_runner/issues/52)
+- Make that xref\_runner supports rebar3 compilation [\#50](https://github.com/inaka/xref_runner/issues/50)
+- Update repo and make it ready for hex.pm [\#48](https://github.com/inaka/xref_runner/issues/48)
+
+**Merged pull requests:**
+
+- \[Fix \#54\] Euen.54.rebar3 [\#55](https://github.com/inaka/xref_runner/pull/55) ([Euen](https://github.com/Euen))
+- Fix for \#52 [\#53](https://github.com/inaka/xref_runner/pull/53) ([X4lldux](https://github.com/X4lldux))
+- \[\#50\] Added rebar3 support [\#51](https://github.com/inaka/xref_runner/pull/51) ([davecaos](https://github.com/davecaos))
+- \[Fix \#48\] Update dependencies; Add \*ruleset\* to elvis.config; Update erlang.mk [\#49](https://github.com/inaka/xref_runner/pull/49) ([harenson](https://github.com/harenson))
+
 ## [0.2.6](https://github.com/inaka/xref_runner/tree/0.2.6) (2016-01-19)
 [Full Changelog](https://github.com/inaka/xref_runner/compare/0.2.5...0.2.6)
 
@@ -7,8 +24,13 @@
 
 - Modify IGNORE\_DEPS in Makefile [\#44](https://github.com/inaka/xref_runner/issues/44)
 
+**Closed issues:**
+
+- Version Bump to 0.2.6 [\#45](https://github.com/inaka/xref_runner/issues/45)
+
 **Merged pull requests:**
 
+- \[Fix \#45\] version bump [\#47](https://github.com/inaka/xref_runner/pull/47) ([Euen](https://github.com/Euen))
 - \[Fix \#44\] modify IGNORE DEPS [\#46](https://github.com/inaka/xref_runner/pull/46) ([Euen](https://github.com/Euen))
 
 ## [0.2.5](https://github.com/inaka/xref_runner/tree/0.2.5) (2016-01-15)
