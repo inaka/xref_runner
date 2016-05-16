@@ -1,9 +1,8 @@
 %% -------------------------------------------------------------------
 %% @doc XRef Runner.
 %% This module is basically copied from rebar's rebar_xref, which in turn
-%% borrows heavily from http://github.com/etnt/echeckxref project as
+%% borrows heavily from http://github.com/etnt/exrefcheck project as
 %% written by Torbjorn Tornkvist, Daniel Luna and others.
-%% @see http://github.com/etnt/echeckxref
 %% @end
 %% -------------------------------------------------------------------
 -module(xref_runner).
