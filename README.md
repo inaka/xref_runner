@@ -22,7 +22,7 @@ That's when xref_runner comes along.
 
 ### Script
 
-`xref_runner` can be turned into a script by executing `rebar3 escript`. This will
+`xref_runner` can be turned into a script by executing `rebar3 escriptize`. This will
 generate an `xrefr` self-contained executable script, from which you can get
 help by typing `xrefr -h`.
 
