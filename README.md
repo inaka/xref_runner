@@ -23,8 +23,8 @@ That's when xref_runner comes along.
 ### Script
 
 `xref_runner` can be turned into a script by executing `rebar3 escriptize`. This will
-generate an `xrefr` self-contained executable script, from which you can get
-help by typing `xrefr -h`.
+generate a self-contained executable script in `_build/default/bin/xrefr`, from which
+you can get help by typing `xrefr -h`.
 
 Use `xrefr` command to run from the terminal (i.e. `xrefr`).
 There's no need to specify a configuration file path if you have an
