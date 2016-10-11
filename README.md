@@ -1,3 +1,5 @@
+![](https://twistedsifter.files.wordpress.com/2015/03/wile-e-coyote-chasing-the-road-runner.jpg)
+
 # Xref Runner
 Erlang Xref Runner (inspired in rebar's rebar_xref)
 
