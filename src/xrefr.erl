@@ -8,23 +8,32 @@
 
 %% @doc Allows us to runs xref_runner as script.
 %%      This can be generated executing make escript
--spec main(string()) -> ok | [xref_runner:warning()].
+-spec main(string()) -> ok | no_return().
 main(Args) ->
   OptSpecList = option_spec_list(),
   case getopt:parse(OptSpecList, Args) of
     {ok, {Options, _Commands}} ->
-      process_options(Options);
+      case process_options(Options) of
+          ok       -> ok;
+          []       -> ok;
+          Warnings -> maybe_halt(Warnings)
+      end;
     {error, {Reason, Data}} ->
       error_prn("~s ~p~n", [Reason, Data]),
       help(),
-      maybe_halt()
+      maybe_halt(64) %% 64 is EX_USAGE in sysexits(3).
   end.
 
--spec maybe_halt() -> no_return().
-maybe_halt() ->
+-spec maybe_halt(non_neg_integer() | [xref_runner:warning()]) -> no_return().
+maybe_halt(Warnings) when is_list(Warnings) ->
   case application:get_env(xref_runner, halt_behaviour, halt) of
     halt -> erlang:halt(1);
-    exception -> throw(halt)
+    exception -> throw({halt, Warnings})
+  end;
+maybe_halt(ExitStatus) when is_integer(ExitStatus) ->
+  case application:get_env(xref_runner, halt_behaviour, halt) of
+    halt -> erlang:halt(ExitStatus);
+    exception -> throw({halt, ExitStatus})
   end.
 
 -spec help() -> ok.
