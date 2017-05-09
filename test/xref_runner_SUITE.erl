@@ -473,36 +473,40 @@ check_as_script(_Config) ->
     try xrefr:main("-g") of
       R -> ct:fail("Unexpected result ~p", [R])
     catch
-      _:halt -> ok
+      _:{halt, 64} -> ok
     end,
 
     ct:comment("Argument -h"),
     ok = xrefr:main("-h"),
 
     ct:comment("Specifying an unexistent config file with -config"),
-    [] = xrefr:main("--config invalid_xref_config"),
+    ok = xrefr:main("--config invalid_xref_config"),
 
     ct:comment("Specifying an invalid argument"),
-    [] = xrefr:main("invalid-argument"),
+    ok = xrefr:main("invalid-argument"),
 
     ct:comment("Empty config works as if there is no config"),
     ok = WriteConfig([]),
-    [] = xrefr:main([]),
+    ok = xrefr:main([]),
 
     ct:comment("Empty list of options works as if there is no config"),
     ok = WriteConfig([{xref, []}]),
-    [] = xrefr:main([]),
+    ok = xrefr:main([]),
 
     ct:comment("With the proper dir, but no checks, runs default checks"),
     Path = get_path("ignore_xref"),
     ok = WriteConfig([{xref, [{config, #{dirs => [Path]}}]}]),
-    AllResults = xrefr:main([]),
-    [_|_] = [1 || #{check := undefined_function_calls} <- AllResults],
-    [] = [1 || #{check := undefined_functions} <- AllResults],
-    [_|_] = [1 || #{check := locals_not_used} <- AllResults],
-    [] = [1 || #{check := exports_not_used} <- AllResults],
-    [_|_] = [1 || #{check := deprecated_function_calls} <- AllResults],
-    [] = [1 || #{check := deprecated_functions} <- AllResults],
+    try xrefr:main([]) of
+      Ret1 -> ct:fail("Unexpected result ~p", [Ret1])
+    catch
+      _:{halt, AllResults} ->
+        [_|_] = [1 || #{check := undefined_function_calls} <- AllResults],
+        [] = [1 || #{check := undefined_functions} <- AllResults],
+        [_|_] = [1 || #{check := locals_not_used} <- AllResults],
+        [] = [1 || #{check := exports_not_used} <- AllResults],
+        [_|_] = [1 || #{check := deprecated_function_calls} <- AllResults],
+        [] = [1 || #{check := deprecated_functions} <- AllResults]
+    end,
 
     ct:comment("With the proper dir, with checks, runs only those checks"),
     ok =
@@ -516,13 +520,17 @@ check_as_script(_Config) ->
             ]
           }
         ] ),
-    SomeResults1 = xrefr:main([]),
-    [] = [1 || #{check := undefined_function_calls} <- SomeResults1],
-    [_|_] = [1 || #{check := undefined_functions} <- SomeResults1],
-    [] = [1 || #{check := locals_not_used} <- SomeResults1],
-    [_|_] = [1 || #{check := exports_not_used} <- SomeResults1],
-    [] = [1 || #{check := deprecated_function_calls} <- SomeResults1],
-    [_|_] = [1 || #{check := deprecated_functions} <- SomeResults1],
+    try xrefr:main([]) of
+      Ret2 -> ct:fail("Unexpected result ~p", [Ret2])
+    catch
+      _:{halt, SomeResults1} ->
+        [] = [1 || #{check := undefined_function_calls} <- SomeResults1],
+        [_|_] = [1 || #{check := undefined_functions} <- SomeResults1],
+        [] = [1 || #{check := locals_not_used} <- SomeResults1],
+        [_|_] = [1 || #{check := exports_not_used} <- SomeResults1],
+        [] = [1 || #{check := deprecated_function_calls} <- SomeResults1],
+        [_|_] = [1 || #{check := deprecated_functions} <- SomeResults1]
+    end,
 
     ct:comment("With the proper dir, with checks == [], runs no check"),
     ok =
@@ -533,7 +541,7 @@ check_as_script(_Config) ->
             ]
           }
         ] ),
-    [] = xrefr:main([]),
+    ok = xrefr:main([]),
 
     ct:comment("With the proper dir, with checks, specifying xref.config path"),
     ok =
@@ -544,13 +552,17 @@ check_as_script(_Config) ->
             ]
           }
         ] ),
-    SomeResults2 = xrefr:main("-c test-xref.config"),
-    [] = [1 || #{check := undefined_function_calls} <- SomeResults2],
-    [] = [1 || #{check := undefined_functions} <- SomeResults2],
-    [_|_] = [1 || #{check := locals_not_used} <- SomeResults2],
-    [_|_] = [1 || #{check := exports_not_used} <- SomeResults2],
-    [] = [1 || #{check := deprecated_function_calls} <- SomeResults2],
-    [] = [1 || #{check := deprecated_functions} <- SomeResults2],
+    try xrefr:main("-c test-xref.config") of
+      Ret3 -> ct:fail("Unexpected result ~p", [Ret3])
+    catch
+      _:{halt, SomeResults2} ->
+        [] = [1 || #{check := undefined_function_calls} <- SomeResults2],
+        [] = [1 || #{check := undefined_functions} <- SomeResults2],
+        [_|_] = [1 || #{check := locals_not_used} <- SomeResults2],
+        [_|_] = [1 || #{check := exports_not_used} <- SomeResults2],
+        [] = [1 || #{check := deprecated_function_calls} <- SomeResults2],
+        [] = [1 || #{check := deprecated_functions} <- SomeResults2]
+    end,
 
     {comment, ""}
   after
