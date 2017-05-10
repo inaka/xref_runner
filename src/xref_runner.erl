@@ -227,7 +227,7 @@ find_function_source(M, F, A, Bin) ->
              element(4, E) == A],
 
   case Fn of
-    [{function, Line, F, _, _}] -> {Source, Line};
+    [{function, Line, F, _, _}] -> {Source, erl_anno:line(Line)};
     %% do not crash if functions are exported, even though they
     %% are not in the source.
     %% parameterized modules add new/1 and instance/1 for example.
