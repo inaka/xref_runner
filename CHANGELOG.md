@@ -1,10 +1,28 @@
 # Change Log
 
+## [1.1.0](https://github.com/inaka/xref_runner/tree/1.1.0) (2017-05-11)
+[Full Changelog](https://github.com/inaka/xref_runner/compare/1.0.0...1.1.0)
+
+**Closed issues:**
+
+- Remove circular dependency [\#56](https://github.com/inaka/xref_runner/issues/56)
+- Fix image on README [\#31](https://github.com/inaka/xref_runner/issues/31)
+
+**Merged pull requests:**
+
+- xref\_runner:find\_function\_source\(\): Convert annotation to line number [\#66](https://github.com/inaka/xref_runner/pull/66) ([dumbbell](https://github.com/dumbbell))
+- xrefr:main/1: Halt with a non-zero exit status if warnings [\#65](https://github.com/inaka/xref_runner/pull/65) ([dumbbell](https://github.com/dumbbell))
+- Update README.md [\#63](https://github.com/inaka/xref_runner/pull/63) ([l33tLumberjack](https://github.com/l33tLumberjack))
+- small README fixes [\#62](https://github.com/inaka/xref_runner/pull/62) ([srenatus](https://github.com/srenatus))
+- \[\#56\] create xref\_meta\_SUITE with Elvis & Dialyzer [\#60](https://github.com/inaka/xref_runner/pull/60) ([Euen](https://github.com/Euen))
+- Fix edoc comment [\#59](https://github.com/inaka/xref_runner/pull/59) ([Euen](https://github.com/Euen))
+
 ## [1.0.0](https://github.com/inaka/xref_runner/tree/1.0.0) (2016-05-13)
 [Full Changelog](https://github.com/inaka/xref_runner/compare/0.2.6...1.0.0)
 
 **Closed issues:**
 
+- Version Bump to 1.0.0 [\#57](https://github.com/inaka/xref_runner/issues/57)
 - Move from erlang.mk to rebar3 [\#54](https://github.com/inaka/xref_runner/issues/54)
 - Broken for modules created with Elixir [\#52](https://github.com/inaka/xref_runner/issues/52)
 - Make that xref\_runner supports rebar3 compilation [\#50](https://github.com/inaka/xref_runner/issues/50)
@@ -12,6 +30,7 @@
 
 **Merged pull requests:**
 
+- \[Close \#57\] version bump 1.0.0 [\#58](https://github.com/inaka/xref_runner/pull/58) ([Euen](https://github.com/Euen))
 - \[Fix \#54\] Euen.54.rebar3 [\#55](https://github.com/inaka/xref_runner/pull/55) ([Euen](https://github.com/Euen))
 - Fix for \#52 [\#53](https://github.com/inaka/xref_runner/pull/53) ([X4lldux](https://github.com/X4lldux))
 - \[\#50\] Added rebar3 support [\#51](https://github.com/inaka/xref_runner/pull/51) ([davecaos](https://github.com/davecaos))
