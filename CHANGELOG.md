@@ -1,15 +1,29 @@
 # Change Log
 
+## [1.1.1](https://github.com/inaka/xref_runner/tree/1.1.1) (2018-06-30)
+[Full Changelog](https://github.com/inaka/xref_runner/compare/1.1.0...1.1.1)
+
+**Fixed bugs:**
+
+- Error when xref'd code depends on a behavior in deps [\#23](https://github.com/inaka/xref_runner/issues/23)
+
+**Merged pull requests:**
+
+- Remove dead hipchat link [\#68](https://github.com/inaka/xref_runner/pull/68) ([elbrujohalcon](https://github.com/elbrujohalcon))
+- Compatibility with OTP19+ [\#61](https://github.com/inaka/xref_runner/pull/61) ([cabol](https://github.com/cabol))
+
 ## [1.1.0](https://github.com/inaka/xref_runner/tree/1.1.0) (2017-05-11)
 [Full Changelog](https://github.com/inaka/xref_runner/compare/1.0.0...1.1.0)
 
 **Closed issues:**
 
+- Version Bump to 1.1.0 [\#64](https://github.com/inaka/xref_runner/issues/64)
 - Remove circular dependency [\#56](https://github.com/inaka/xref_runner/issues/56)
 - Fix image on README [\#31](https://github.com/inaka/xref_runner/issues/31)
 
 **Merged pull requests:**
 
+- \[Close \#64\] version bump to 1.1.0 [\#67](https://github.com/inaka/xref_runner/pull/67) ([Euen](https://github.com/Euen))
 - xref\_runner:find\_function\_source\(\): Convert annotation to line number [\#66](https://github.com/inaka/xref_runner/pull/66) ([dumbbell](https://github.com/dumbbell))
 - xrefr:main/1: Halt with a non-zero exit status if warnings [\#65](https://github.com/inaka/xref_runner/pull/65) ([dumbbell](https://github.com/dumbbell))
 - Update README.md [\#63](https://github.com/inaka/xref_runner/pull/63) ([l33tLumberjack](https://github.com/l33tLumberjack))
