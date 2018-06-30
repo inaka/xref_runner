@@ -1,6 +1,6 @@
 {"1.1.0",
-[{<<"getopt">>,{pkg,<<"getopt">>,<<"0.8.2">>},0}]}.
+[{<<"getopt">>,{pkg,<<"getopt">>,<<"1.0.1">>},0}]}.
 [
 {pkg_hash,[
- {<<"getopt">>, <<"B17556DB683000BA50370B16C0619DF1337E7AF7ECBF7D64FBF8D1D6BCE3109B">>}]}
+ {<<"getopt">>, <<"C73A9FA687B217F2FF79F68A3B637711BB1936E712B521D8CE466B29CBF7808A">>}]}
 ].

@@ -76,7 +76,7 @@ check_rebar3_build_fail(_Config) ->
   _ = rebar3_compile(RepoName),
   [Warning] = xref_runner:check(),
 
-  #{ line      := 9
+  #{ line      := 11
    , check     := undefined_function_calls
    , filename  := Filename
    , source    := {erlang_repo_fail_sup, init, 1}
