@@ -145,8 +145,16 @@ filter_xref_results(Check, Results) ->
     lists:flatmap(
       fun(Module) -> get_ignorelist(Module, Check) end, SourceModules),
 
+
   [Result || Result <- Results,
-             not lists:member(parse_xref_result(Result), Ignores)].
+            not should_ignore(Result, Ignores)].
+
+should_ignore(Result, Ignores) ->
+    Parsed = parse_xref_result(Result),
+    lists:any(fun (I) ->
+                      element(1, Parsed) == I
+                      orelse Parsed == I
+              end, Ignores).
 
 source_module({Mt, _Ft, _At}) -> Mt;
 source_module({{Ms, _Fs, _As}, _Target}) -> Ms.
@@ -155,7 +163,7 @@ source_module({{Ms, _Fs, _As}, _Target}) -> Ms.
 %% Ignore behaviour functions, and explicitly marked functions
 %%
 %% Functions can be ignored by using
-%% -ignore_xref([{F, A}, {M, F, A}...]).
+%% -ignore_xref([{F, A}, {M, F, A}, M...]).
 get_ignorelist(Mod, Check) ->
   %% Get ignore_xref attribute and combine them in one list
   Attributes =
@@ -167,6 +175,7 @@ get_ignorelist(Mod, Check) ->
 
   IgnoreXref =
     [mfa(Mod, Value) || {ignore_xref, Values} <- Attributes, Value <- Values],
+
 
   BehaviourCallbacks = get_behaviour_callbacks(Check, Mod, Attributes),
 
@@ -180,6 +189,7 @@ get_behaviour_callbacks(exports_not_used, Mod, Attributes) ->
 get_behaviour_callbacks(_Check, _Mod, _Attributes) ->
   [].
 
+mfa(M, V) when is_atom(V) -> M;
 mfa(M, {F, A}) -> {M, {M, F, A}};
 mfa(M, MFA) -> {M, MFA}.
 
