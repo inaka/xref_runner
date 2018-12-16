@@ -11,6 +11,7 @@
         , deprecated_function_calls/1
         , deprecated_functions/1
         , ignore_xref/1
+        , ignore_xref2/1
         , check_with_config_file/1
         , check_with_no_config_file/1
         , check_as_script/1
@@ -316,6 +317,19 @@ ignore_xref(_Config) ->
   ct:comment("It contains no other warnings"),
   [] = Warnings -- [W1, W2],
 
+
+  {comment, ""}.
+
+-spec ignore_xref2(config()) -> {comment, string()}.
+ignore_xref2(_Config) ->
+  Path = get_path("ignore_xref"),
+  Config = #{ dirs => [Path] },
+  AllWarnings = xref_runner:check(deprecated_function_calls, Config),
+   Warnings =
+    [W || W = #{filename := F} <- AllWarnings
+        , filename:basename(F) == "ignore_xref2.erl"],
+  Config = #{ dirs => [Path] },
+  [] = Warnings,
   {comment, ""}.
 
 -spec check_with_no_config_file(config()) -> {comment, string()}.
