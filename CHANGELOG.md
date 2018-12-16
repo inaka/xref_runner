@@ -1,5 +1,16 @@
 # Change Log
 
+## [1.2.0](https://github.com/inaka/xref_runner/tree/1.2.0) (2018-12-16)
+[Full Changelog](https://github.com/inaka/xref_runner/compare/1.1.1...1.2.0)
+
+**Closed issues:**
+
+- Support xref\_ignore for full modules like rebar3 does now [\#70](https://github.com/inaka/xref_runner/issues/70)
+
+**Merged pull requests:**
+
+- Add Support to ignore a whole module via -ignore\_xref\(\) [\#71](https://github.com/inaka/xref_runner/pull/71) ([starbelly](https://github.com/starbelly))
+
 ## [1.1.1](https://github.com/inaka/xref_runner/tree/1.1.1) (2018-06-30)
 [Full Changelog](https://github.com/inaka/xref_runner/compare/1.1.0...1.1.1)
 
@@ -9,6 +20,7 @@
 
 **Merged pull requests:**
 
+- Bump Version to 1.1.1 [\#69](https://github.com/inaka/xref_runner/pull/69) ([elbrujohalcon](https://github.com/elbrujohalcon))
 - Remove dead hipchat link [\#68](https://github.com/inaka/xref_runner/pull/68) ([elbrujohalcon](https://github.com/elbrujohalcon))
 - Compatibility with OTP19+ [\#61](https://github.com/inaka/xref_runner/pull/61) ([cabol](https://github.com/cabol))
 
